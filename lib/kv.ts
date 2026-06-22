@@ -2,8 +2,10 @@
 // API via fetch. Se UPSTASH_REDIS_REST_URL/TOKEN não estiverem configurados,
 // kvConfigured() = false e o checkout continua funcionando sem KV (best effort).
 
-const REST_URL = process.env.UPSTASH_REDIS_REST_URL?.replace(/\/$/, "")
-const REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN
+// Aceita os dois padrões de nome: o do Upstash (UPSTASH_REDIS_REST_*) e o que a
+// integração de Storage da Vercel costuma injetar (KV_REST_API_*).
+const REST_URL = (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL)?.replace(/\/$/, "")
+const REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN
 
 export function kvConfigured(): boolean {
   return Boolean(REST_URL && REST_TOKEN)
