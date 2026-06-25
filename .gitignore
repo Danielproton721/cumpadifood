@@ -8,4 +8,7 @@ node_modules/
 .next/
 .env
 .env*.local
-.DS_StoreChatGPT Image *.png
+.DS_Store
+
+# Imagens soltas exportadas do ChatGPT (a arte final vai pra public/)
+ChatGPT Image *.png
