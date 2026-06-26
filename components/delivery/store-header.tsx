@@ -33,11 +33,18 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
 
   return (
     <header className="bg-background">
-      {/* Capa vermelha (cover) com selecao de endereco + acoes */}
-      <div className="relative h-40 w-full overflow-hidden bg-gradient-to-br from-[#e8202b] via-[#d11522] to-[#a50d18]">
-        {/* brilho sutil */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_15%,rgba(255,255,255,0.22),transparent_45%)]" />
-        <div className="pointer-events-none absolute -right-8 -top-10 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+      {/* Capa com a foto da fachada + escurecido sutil pra legibilidade */}
+      <div className="relative h-40 w-full overflow-hidden bg-muted">
+        <Image
+          src="/store-front-compadrefood.jpg"
+          alt="Fachada CompadreFood"
+          fill
+          priority
+          sizes="(max-width: 640px) 100vw, 640px"
+          className="object-cover object-center"
+        />
+        {/* overlay escuro: mantém o endereço e os ícones brancos legíveis */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/45" />
 
         <div className="relative max-w-lg mx-auto px-4 pt-4 flex items-start justify-between gap-3 animate-in fade-in slide-in-from-top-3 duration-500">
           {/* Endereco */}
