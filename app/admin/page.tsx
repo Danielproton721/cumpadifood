@@ -1,7 +1,9 @@
 import { adminConfigured, isAuthed } from "@/lib/admin-auth"
 import { kvConfigured, listRecentOrders, type AdminOrder } from "@/lib/order-store"
+import { getActiveGateway } from "@/lib/gateways/active"
 import { AdminLogin } from "./admin-login"
 import { LogoutButton } from "./logout-button"
+import { GatewaySwitch } from "./gateway-switch"
 
 export const dynamic = "force-dynamic"
 
@@ -32,6 +34,7 @@ export default async function AdminPage() {
   }
 
   const orders = kvConfigured() ? await listRecentOrders(100) : []
+  const activeGateway = await getActiveGateway()
   const total = orders.length
   const pagos = orders.filter((o) => o.status === "pago").length
   const abandonados = orders.filter((o) => o.status === "abandonado").length
@@ -48,6 +51,8 @@ export default async function AdminPage() {
           </div>
           <LogoutButton />
         </div>
+
+        <GatewaySwitch initial={activeGateway} kvOk={kvConfigured()} />
 
         {!kvConfigured() && (
           <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
