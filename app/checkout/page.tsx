@@ -68,7 +68,7 @@ function clearConfirmedOrder() {
   }
 }
 
-// Google Ads — conversao de compra (conta CompadreFood; mesma tag do layout.tsx)
+// Google Ads — conversao de compra (conta CumpadiFood; mesma tag do layout.tsx)
 const GOOGLE_ADS_CONVERSION_SEND_TO = 'AW-18249151503/tgPxCP2UpcEcEI_o7_1D';
 const GOOGLE_ADS_CONVERSION_STORAGE_KEY = 'compadrefood-google-ads-conversions-v1';
 
@@ -1301,7 +1301,7 @@ function CheckoutContent() {
             className="flex items-center justify-center gap-2 text-xs text-gray-400 font-bold mb-8"
           >
             <ShieldCheck className="w-4 h-4" />
-            Compra 100% segura — CompadreFood
+            Compra 100% segura — CumpadiFood
           </motion.div>
 
           {/* Botão voltar para loja */}
@@ -1429,10 +1429,10 @@ function CheckoutContent() {
             {/* Loja */}
             <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
               <div className="w-11 h-11 rounded-full bg-white ring-1 ring-gray-200 overflow-hidden flex items-center justify-center shrink-0">
-                <img src="/logo.png" alt="CompadreFood" className="w-full h-full object-contain" />
+                <img src="/logo.png" alt="CumpadiFood" className="w-full h-full object-contain" />
               </div>
               <div className="min-w-0">
-                <p className="font-extrabold text-gray-900 leading-tight">CompadreFood</p>
+                <p className="font-extrabold text-gray-900 leading-tight">CumpadiFood</p>
                 <button type="button" onClick={() => (window.location.href = '/')} className="text-sm font-bold text-[#e23744]">Adicionar mais itens</button>
               </div>
             </div>
@@ -1636,10 +1636,10 @@ function CheckoutContent() {
                 {/* Loja */}
                 <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
                   <div className="w-11 h-11 rounded-full bg-white ring-1 ring-gray-200 overflow-hidden flex items-center justify-center shrink-0">
-                    <img src="/logo.png" alt="CompadreFood" className="w-full h-full object-contain" />
+                    <img src="/logo.png" alt="CumpadiFood" className="w-full h-full object-contain" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-extrabold text-gray-900 leading-tight">CompadreFood</p>
+                    <p className="font-extrabold text-gray-900 leading-tight">CumpadiFood</p>
                     <button onClick={() => (window.location.href = '/')} className="text-sm font-bold text-[#e23744]">Adicionar mais itens</button>
                   </div>
                 </div>

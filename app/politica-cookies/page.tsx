@@ -76,7 +76,7 @@ export default function PoliticaCookies() {
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">7. Contato</h2>
               <p>
-                Para dúvidas sobre cookies e privacidade, entre em contato pelo e-mail suporte@compadrefood.com
+                Para dúvidas sobre cookies e privacidade, entre em contato pelo e-mail suporte@cumpadifood.com
               </p>
               <p>
                 <strong className="text-foreground">M R COSTEIRA LTDA</strong> — CNPJ 58.702.190/0002-50

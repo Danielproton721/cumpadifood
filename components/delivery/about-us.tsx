@@ -20,10 +20,10 @@ export function AboutUs() {
         </div>
         
         <div className="p-4 space-y-3">
-          <h3 className="font-bold text-foreground text-lg">CompadreFood Distribuidora</h3>
+          <h3 className="font-bold text-foreground text-lg">CumpadiFood Distribuidora</h3>
           
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Fundada desde 2022, a CompadreFood é uma distribuidora comprometida em trabalhar 
+            Fundada desde 2022, a CumpadiFood é uma distribuidora comprometida em trabalhar 
             com as melhores marcas de bebidas de extrema qualidade. Oferecemos preços imbatíveis 
             e garantimos satisfação em cada pedido.
           </p>

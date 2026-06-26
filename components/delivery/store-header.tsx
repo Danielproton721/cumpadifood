@@ -93,7 +93,7 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
             <div className="w-[88px] h-[88px] rounded-full bg-white ring-4 ring-card shadow-xl overflow-hidden flex items-center justify-center hover:scale-105 transition-transform duration-300">
               <Image
                 src="/logo.png"
-                alt="CompadreFood"
+                alt="CumpadiFood"
                 width={88}
                 height={88}
                 className="object-contain"
@@ -109,7 +109,7 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
             className="w-full flex items-center justify-between gap-2 group"
           >
             <h1 className="text-2xl font-extrabold text-foreground tracking-tight leading-none">
-              CompadreFood
+              CumpadiFood
             </h1>
             <ChevronRight className="w-6 h-6 text-muted-foreground shrink-0 group-hover:translate-x-0.5 transition-transform" />
           </button>

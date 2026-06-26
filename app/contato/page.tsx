@@ -38,8 +38,8 @@ export default function Contato() {
               <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
               <div className="text-sm">
                 <p className="font-semibold text-foreground">E-mail</p>
-                <a href="mailto:suporte@compadrefood.com" className="text-primary hover:underline">
-                  suporte@compadrefood.com
+                <a href="mailto:suporte@cumpadifood.com" className="text-primary hover:underline">
+                  suporte@cumpadifood.com
                 </a>
               </div>
             </div>

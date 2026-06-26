@@ -80,7 +80,7 @@ export function Footer() {
           </p>
           <p className="text-xs text-muted-foreground">
             Contato:{" "}
-            <a href="mailto:suporte@compadrefood.com" className="text-primary hover:underline">suporte@compadrefood.com</a>
+            <a href="mailto:suporte@cumpadifood.com" className="text-primary hover:underline">suporte@cumpadifood.com</a>
           </p>
           <p className="text-xs text-muted-foreground pt-1">
             © {new Date().getFullYear()} M R COSTEIRA LTDA. Todos os direitos reservados.
