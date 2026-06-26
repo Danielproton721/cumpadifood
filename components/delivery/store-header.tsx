@@ -41,10 +41,10 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
           fill
           priority
           sizes="(max-width: 640px) 100vw, 640px"
-          className="object-cover object-center"
+          className="object-cover object-top"
         />
-        {/* overlay escuro: mantém o endereço e os ícones brancos legíveis */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/45 via-black/25 to-black/45" />
+        {/* escurecido só o necessário pra deixar o endereço/ícones brancos legíveis */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-black/10 to-black/30" />
 
         <div className="relative max-w-lg mx-auto px-4 pt-4 flex items-start justify-between gap-3 animate-in fade-in slide-in-from-top-3 duration-500">
           {/* Endereco */}
