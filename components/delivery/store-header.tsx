@@ -36,8 +36,8 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
       {/* Capa com a foto da fachada + escurecido sutil pra legibilidade */}
       <div className="relative h-40 w-full overflow-hidden bg-muted">
         <Image
-          src="/store-front-compadrefood.jpg"
-          alt="Fachada CompadreFood"
+          src="/store-front-cumpadifood.png"
+          alt="Fachada CumpadiFood"
           fill
           priority
           sizes="(max-width: 640px) 100vw, 640px"
