@@ -12,7 +12,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'CumpadiFood - Pedidos Online',
+  title: 'CompadreFood - Pedidos Online',
   description: 'Bebida gelada pro teu bloco - entrega rapida!',
 }
 

@@ -23,7 +23,7 @@ export default function TermosServico() {
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">1. Aceitação dos Termos</h2>
               <p>
-                Ao usar a plataforma da M R COSTEIRA LTDA (CumpadiFood), você concorda com estes Termos de Serviço. Se não concordar
+                Ao usar a plataforma da M R COSTEIRA LTDA (CompadreFood), você concorda com estes Termos de Serviço. Se não concordar
                 com alguma disposição, por favor, não use nossos serviços.
               </p>
             </section>
@@ -86,7 +86,7 @@ export default function TermosServico() {
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">9. Contato</h2>
               <p>
-                Para dúvidas ou reclamações, entre em contato conosco pelo e-mail suporte@cumpadifood.com
+                Para dúvidas ou reclamações, entre em contato conosco pelo e-mail suporte@compadrefood.com
               </p>
               <p>
                 <strong className="text-foreground">M R COSTEIRA LTDA</strong> — CNPJ 58.702.190/0002-50

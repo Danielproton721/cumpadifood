@@ -1,4 +1,4 @@
-// Template do e-mail de confirmação de pedido — CumpadiFood.
+// Template do e-mail de confirmação de pedido — CompadreFood.
 // Portado do projeto "loja estilo shopify" e rebrandeado (vermelho + bebida,
 // entrega grátis em 1h, sem Correios/rastreio).
 
@@ -39,7 +39,7 @@ export type OrderEmailInput = {
   paymentMethod: "pix" | "card";
 };
 
-const BRAND_NAME = "CumpadiFood";
+const BRAND_NAME = "CompadreFood";
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://v0-del-ivery-copia-dany.vercel.app";
 const BRAND_LOGO_URL = `${APP_URL}/logo.png`;
@@ -48,7 +48,7 @@ const BRAND_LOGO_URL = `${APP_URL}/logo.png`;
 const C = {
   primary: "#1a1a1a",
   dark: "#1a1a1a",
-  accent: "#e8202b", // vermelho CumpadiFood
+  accent: "#e8202b", // vermelho CompadreFood
   accentSoft: "#fff1f1",
   accentBorder: "#f6c9cc",
   green: "#16a34a",

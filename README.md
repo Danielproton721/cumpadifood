@@ -1,4 +1,4 @@
-# CumpadiFood
+# CompadreFood
 
 Loja de delivery de bebidas (Next.js 16 / React 19 / Tailwind v4), deploy na Vercel.
 

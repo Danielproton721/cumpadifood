@@ -156,7 +156,7 @@ export async function POST(request: Request) {
       cpfDigits,
       phoneDigits,
       ip: buyerIp,
-      title: title || "Pedido CumpadiFood",
+      title: title || "Pedido CompadreFood",
       postbackUrl,
     })
 
