@@ -1,3 +1,5 @@
+import Link from "next/link"
+import { RadioTower } from "lucide-react"
 import { adminConfigured, isAuthed } from "@/lib/admin-auth"
 import { kvConfigured, listRecentOrders, type AdminOrder } from "@/lib/order-store"
 import { getActiveGateway } from "@/lib/gateways/active"
@@ -68,6 +70,13 @@ export default async function AdminPage() {
             </p>
           </div>
           <div className="flex items-center justify-between gap-3 sm:justify-end">
+            <Link
+              href="/admin/relay"
+              className="inline-flex h-9 items-center gap-2 rounded-lg border border-border bg-card px-3 text-xs font-bold text-foreground transition hover:bg-muted"
+            >
+              <RadioTower className="h-4 w-4" />
+              Relay
+            </Link>
             <OnlineCount />
             <LogoutButton />
           </div>
