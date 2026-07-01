@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { getPaymentNotifyUrl } from "@/lib/payment-notify-url"
 
 export const dynamic = "force-dynamic"
 
@@ -85,7 +84,6 @@ export async function POST(request: Request) {
 
   const ip = getClientIp(request)
   const buyerIp = isPrivateIp(ip) ? "177.71.248.55" : ip
-  const notifyUrl = getPaymentNotifyUrl(request)
 
   const billingAddress = address
     ? {
@@ -120,7 +118,6 @@ export async function POST(request: Request) {
     amount: amountCents,
     currency: "BRL",
     method: "credit_card",
-    notify_url: notifyUrl,
     token,
     installments: installmentCount,
     ip_address: buyerIp,

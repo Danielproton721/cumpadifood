@@ -3,7 +3,6 @@ import { generateOrderCode, kvConfigured, saveOrderSnapshot } from "@/lib/order-
 import { qstashConfigured, scheduleDelayedCall } from "@/lib/qstash"
 import { getActiveGateway, markTxGateway, type GatewayId } from "@/lib/gateways/active"
 import { createPixMedusa, medusaConfigured } from "@/lib/gateways/medusa"
-import { getPaymentNotifyUrl } from "@/lib/payment-notify-url"
 import type { OrderEmailInput } from "@/lib/order-email"
 
 export const dynamic = "force-dynamic"
@@ -198,14 +197,12 @@ export async function POST(request: Request) {
   const secretKey = rawKey.trim().replace(/^Bearer\s+/i, "")
   const endpoint = "https://api.pagou.ai/v2/transactions"
   const externalRef = `order_${Date.now()}_${cpfDigits.slice(0, 4)}`
-  const notifyUrl = getPaymentNotifyUrl(request)
 
   const payload: Record<string, any> = {
     external_ref: externalRef,
     amount: amountCents,
     currency: "BRL",
     method: "pix",
-    notify_url: notifyUrl,
     ip_address: buyerIp,
     buyer: {
       name: name.trim(),
