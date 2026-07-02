@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useCallback, useEffect } from "react"
+import { adsSendTo, GOOGLE_ADS_PAGEVIEW_LABEL } from "@/lib/google-ads"
 import { products, categories } from "@/lib/data"
 import type { Product } from "@/lib/types"
 import { copaAtiva, ESQUENTA_IDS } from "@/lib/copa"
@@ -46,6 +47,8 @@ function DeliveryApp() {
   // Conversão de "Visualização de página" no Google Ads — dispara a cada
   // carregamento da home.
   useEffect(() => {
+    const sendTo = adsSendTo(GOOGLE_ADS_PAGEVIEW_LABEL)
+    if (!sendTo) return
     const w = window as Window & { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void }
     if (typeof w.gtag !== "function") {
       w.dataLayer = w.dataLayer || []
@@ -53,7 +56,7 @@ function DeliveryApp() {
         w.dataLayer?.push(arguments)
       }
     }
-    w.gtag("event", "conversion", { send_to: "AW-18249151503/vtPFCMC6ncQcEI_o7_1D" })
+    w.gtag("event", "conversion", { send_to: sendTo })
   }, [])
 
   const esquentaProducts = ESQUENTA_IDS

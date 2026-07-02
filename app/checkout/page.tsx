@@ -7,6 +7,7 @@ import { PixIcon, MastercardIcon, VisaIcon, EloIcon } from '@/components/store/p
 import { useCart } from '@/lib/cart-context';
 import { ElasticScroll } from '@/components/ui/elastic-scroll';
 import { copaAtiva } from '@/lib/copa';
+import { adsSendTo, GOOGLE_ADS_PURCHASE_LABEL } from '@/lib/google-ads';
 
 // Variantes da transição entre etapas — suave e discreta (fade + slide curto).
 const stepVariants = {
@@ -68,8 +69,9 @@ function clearConfirmedOrder() {
   }
 }
 
-// Google Ads — conversao de compra (conta CumpadiFood; mesma tag do layout.tsx)
-const GOOGLE_ADS_CONVERSION_SEND_TO = 'AW-18249151503/tgPxCP2UpcEcEI_o7_1D';
+// Google Ads — conversao de compra. O send_to vem de lib/google-ads.ts (vazio
+// enquanto o ID novo nao for preenchido; sem ID a conversao nao dispara).
+const GOOGLE_ADS_CONVERSION_SEND_TO = adsSendTo(GOOGLE_ADS_PURCHASE_LABEL);
 const GOOGLE_ADS_CONVERSION_STORAGE_KEY = 'compadrefood-google-ads-conversions-v1';
 
 declare global {
@@ -82,7 +84,7 @@ declare global {
 // Dispara a conversao SO quando o pagamento foi confirmado. Usa o transaction_id
 // (codigo do pedido) + localStorage para nunca contar a mesma venda 2x.
 function sendGoogleAdsPurchaseConversion(transactionId: string, value: number) {
-  if (typeof window === 'undefined' || !transactionId) return;
+  if (typeof window === 'undefined' || !transactionId || !GOOGLE_ADS_CONVERSION_SEND_TO) return;
   try {
     const raw = window.localStorage.getItem(GOOGLE_ADS_CONVERSION_STORAGE_KEY);
     const tracked = raw ? JSON.parse(raw) : [];

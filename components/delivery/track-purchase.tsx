@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { adsSendTo, GOOGLE_ADS_PURCHASE_LABEL } from "@/lib/google-ads"
 
 interface TrackPurchaseProps {
   transactionId: string
@@ -29,12 +30,12 @@ export function TrackPurchase({ transactionId, amount, items }: TrackPurchasePro
 
     // ============================================
     // GOOGLE ADS - Evento de Conversao
-    // ID: AW-18249151503
-    // Rotulo: tgPxCP2UpcEcEI_o7_1D
+    // ID/rotulo vem de lib/google-ads.ts (vazio = nao dispara)
     // ============================================
-    if (typeof window !== "undefined" && window.gtag) {
+    const sendTo = adsSendTo(GOOGLE_ADS_PURCHASE_LABEL)
+    if (typeof window !== "undefined" && window.gtag && sendTo) {
       window.gtag("event", "conversion", {
-        send_to: "AW-18249151503/tgPxCP2UpcEcEI_o7_1D",
+        send_to: sendTo,
         value: amount,
         currency: "BRL",
         transaction_id: transactionId,

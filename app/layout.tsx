@@ -6,6 +6,7 @@ import { CookieBanner } from '@/components/cookie-banner'
 import { AgeVerification } from '@/components/delivery/age-verification'
 import { PresenceTracker } from '@/components/delivery/presence-tracker'
 import { CartProvider } from '@/lib/cart-context'
+import { GOOGLE_ADS_ID } from '@/lib/google-ads'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
@@ -31,16 +32,21 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        {/* Google tag (gtag.js) */}
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=AW-18249151503" strategy="afterInteractive" />
-        <Script id="google-gtag" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'AW-18249151503');
-          `}
-        </Script>
+        {/* Google tag (gtag.js) — carrega só quando GOOGLE_ADS_ID está preenchido
+            (lib/google-ads.ts). Vazio = tag desligada, nenhuma conta associada. */}
+        {GOOGLE_ADS_ID && (
+          <>
+            <Script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`} strategy="afterInteractive" />
+            <Script id="google-gtag" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GOOGLE_ADS_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </head>
       <body className={`font-sans antialiased`}>
         <CartProvider>
