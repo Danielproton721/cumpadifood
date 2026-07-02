@@ -165,7 +165,7 @@ export function CartDrawer({ isOpen, onClose, onNavigateToCategory }: CartDrawer
                     <Image src="/logo-cumpadi.png" alt="CumpadiFood" width={44} height={44} className="object-contain" />
                   </div>
                   <div className="min-w-0">
-                    <p className="font-extrabold text-foreground leading-tight">CompadreFood</p>
+                    <p className="font-extrabold text-foreground leading-tight">CumpadiFood</p>
                     <button
                       onClick={onClose}
                       className="text-sm font-bold text-primary hover:opacity-80 transition-opacity"

@@ -23,7 +23,7 @@ export default function TermosServico() {
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">1. Aceitação dos Termos</h2>
               <p>
-                Ao usar a plataforma da M R COSTEIRA LTDA (CompadreFood), você concorda com estes Termos de Serviço. Se não concordar
+                Ao usar a plataforma da M R COSTEIRA LTDA (CumpadiFood), você concorda com estes Termos de Serviço. Se não concordar
                 com alguma disposição, por favor, não use nossos serviços.
               </p>
             </section>

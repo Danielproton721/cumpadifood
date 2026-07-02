@@ -36,8 +36,8 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
       {/* Capa com a foto da fachada + escurecido sutil pra legibilidade */}
       <div className="relative h-40 w-full overflow-hidden bg-muted">
         <Image
-          src="/store-front-compadrefood.jpg"
-          alt="Fachada CompadreFood"
+          src="/store-front-cumpadi.png"
+          alt="Fachada CumpadiFood"
           fill
           priority
           sizes="(max-width: 640px) 100vw, 640px"
@@ -109,7 +109,7 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
             className="w-full flex items-center justify-between gap-2 group"
           >
             <h1 className="text-2xl font-extrabold text-foreground tracking-tight leading-none">
-              CompadreFood
+              CumpadiFood
             </h1>
             <ChevronRight className="w-6 h-6 text-muted-foreground shrink-0 group-hover:translate-x-0.5 transition-transform" />
           </button>

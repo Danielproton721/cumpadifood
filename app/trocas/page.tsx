@@ -80,7 +80,7 @@ export default function TrocasDevolucoes() {
               <p>
                 Nos casos de <strong className="text-foreground">arrependimento (art. 49 do CDC)</strong> e de
                 <strong className="text-foreground"> produto com defeito/avaria</strong>, o custo da devolução é
-                <strong className="text-foreground"> por conta da CompadreFood</strong> — você não paga nada pelo frete de retorno.
+                <strong className="text-foreground"> por conta da CumpadiFood</strong> — você não paga nada pelo frete de retorno.
               </p>
             </section>
 
