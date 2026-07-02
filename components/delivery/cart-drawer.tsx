@@ -162,7 +162,7 @@ export function CartDrawer({ isOpen, onClose, onNavigateToCategory }: CartDrawer
                 {/* Linha da loja */}
                 <div className="flex items-center gap-3 py-4">
                   <div className="w-11 h-11 rounded-full bg-white ring-1 ring-border overflow-hidden flex items-center justify-center flex-shrink-0">
-                    <Image src="/logo.png" alt="CompadreFood" width={44} height={44} className="object-contain" />
+                    <Image src="/logo-cumpadi.png" alt="CumpadiFood" width={44} height={44} className="object-contain" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-extrabold text-foreground leading-tight">CompadreFood</p>

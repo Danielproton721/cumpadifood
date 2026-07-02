@@ -1434,7 +1434,7 @@ function CheckoutContent() {
             {/* Loja */}
             <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
               <div className="w-11 h-11 rounded-full bg-white ring-1 ring-gray-200 overflow-hidden flex items-center justify-center shrink-0">
-                <img src="/logo.png" alt="CompadreFood" className="w-full h-full object-contain" />
+                <img src="/logo-cumpadi.png" alt="CumpadiFood" className="w-full h-full object-contain" />
               </div>
               <div className="min-w-0">
                 <p className="font-extrabold text-gray-900 leading-tight">CompadreFood</p>
@@ -1641,7 +1641,7 @@ function CheckoutContent() {
                 {/* Loja */}
                 <div className="flex items-center gap-3 pb-4 border-b border-gray-100">
                   <div className="w-11 h-11 rounded-full bg-white ring-1 ring-gray-200 overflow-hidden flex items-center justify-center shrink-0">
-                    <img src="/logo.png" alt="CompadreFood" className="w-full h-full object-contain" />
+                    <img src="/logo-cumpadi.png" alt="CumpadiFood" className="w-full h-full object-contain" />
                   </div>
                   <div className="min-w-0">
                     <p className="font-extrabold text-gray-900 leading-tight">CompadreFood</p>

@@ -92,8 +92,8 @@ export function StoreHeader({ userAddress, onChangeAddress }: StoreHeaderProps) 
           <div className="absolute -top-11 left-1/2 -translate-x-1/2">
             <div className="w-[88px] h-[88px] rounded-full bg-white ring-4 ring-card shadow-xl overflow-hidden flex items-center justify-center hover:scale-105 transition-transform duration-300">
               <Image
-                src="/logo.png"
-                alt="CompadreFood"
+                src="/logo-cumpadi.png"
+                alt="CumpadiFood"
                 width={88}
                 height={88}
                 className="object-contain"

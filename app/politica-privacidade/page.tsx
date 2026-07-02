@@ -56,7 +56,7 @@ export default function PoliticaPrivacidade() {
               <h2 className="text-lg font-semibold text-foreground">5. Direitos do Usuário</h2>
               <p>
                 Você tem o direito de acessar, corrigir ou solicitar a exclusão de seus dados pessoais. Para exercer esses
-                direitos, entre em contato conosco pelo e-mail suporte@compadrefood.com
+                direitos, entre em contato conosco pelo e-mail pedidos-suporte@cumpadifood.com
               </p>
             </section>
 
@@ -64,7 +64,7 @@ export default function PoliticaPrivacidade() {
               <h2 className="text-lg font-semibold text-foreground">6. Contato</h2>
               <p>
                 Se tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco pelo e-mail
-                suporte@compadrefood.com
+                pedidos-suporte@cumpadifood.com
               </p>
               <p>
                 <strong className="text-foreground">M R COSTEIRA LTDA</strong> — CNPJ 58.702.190/0002-50

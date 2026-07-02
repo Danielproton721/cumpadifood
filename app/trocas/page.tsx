@@ -69,7 +69,7 @@ export default function TrocasDevolucoes() {
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">5. Como Solicitar</h2>
               <p>
-                Envie um e-mail para <strong className="text-foreground">suporte@compadrefood.com</strong> informando o
+                Envie um e-mail para <strong className="text-foreground">pedidos-suporte@cumpadifood.com</strong> informando o
                 <strong className="text-foreground"> número do pedido</strong>, o motivo da troca/devolução e, se possível,
                 fotos do produto. Nossa equipe responderá com as orientações para a coleta ou devolução.
               </p>

@@ -86,7 +86,7 @@ export default function TermosServico() {
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">9. Contato</h2>
               <p>
-                Para dúvidas ou reclamações, entre em contato conosco pelo e-mail suporte@compadrefood.com
+                Para dúvidas ou reclamações, entre em contato conosco pelo e-mail pedidos-suporte@cumpadifood.com
               </p>
               <p>
                 <strong className="text-foreground">M R COSTEIRA LTDA</strong> — CNPJ 58.702.190/0002-50
