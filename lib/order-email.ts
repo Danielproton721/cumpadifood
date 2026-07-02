@@ -39,10 +39,13 @@ export type OrderEmailInput = {
   paymentMethod: "pix" | "card";
 };
 
-const BRAND_NAME = "CompadreFood";
+// Marca do e-mail configurável por env (cada loja define a sua) — sem isso,
+// mantém o padrão CompadreFood, então o compadre não muda. A logo cai em
+// APP_URL/logo.png se NEXT_PUBLIC_BRAND_LOGO_URL não for definida.
+const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME?.trim() || "CompadreFood";
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://v0-del-ivery-copia-dany.vercel.app";
-const BRAND_LOGO_URL = `${APP_URL}/logo.png`;
+const BRAND_LOGO_URL = process.env.NEXT_PUBLIC_BRAND_LOGO_URL?.trim() || `${APP_URL}/logo.png`;
 
 // Paleta brand (vermelho dominante + verde pra "confirmado")
 const C = {
