@@ -7,7 +7,10 @@ import { CopyButton } from "./copy-button"
 
 export const dynamic = "force-dynamic"
 
-const RELAY_NOTIFY_URL = "https://www.fionobres.shop/api/webhooks/payment/8fdd318fbb10"
+// O id do relay muda por loja (cada loja tem o seu slot), então NÃO chumbamos a
+// URL aqui — senão a tela mente numa das lojas. Validamos só que o
+// NOTIFY_URL_OVERRIDE tem cara de endpoint de relay. Serve qualquer loja.
+const RELAY_PATH_MARKER = "/api/webhooks/payment/"
 const WEBHOOK_PATH = "/api/webhook/pagou"
 
 async function getStoreBaseUrl() {
@@ -72,8 +75,10 @@ export default async function RelayAdminPage() {
   // refletir o que a loja esta de fato usando pra conferencia honesta).
   const notifyOverride = process.env.NOTIFY_URL_OVERRIDE?.trim() || ""
   const relaySecret = process.env.RELAY_SECRET?.trim() || ""
-  const notifyMatches = notifyOverride === RELAY_NOTIFY_URL
-  const envBlock = `NOTIFY_URL_OVERRIDE=${RELAY_NOTIFY_URL}\nRELAY_SECRET=${relaySecret || "COLE_O_SEGREDO_DO_RELAY"}`
+  // "Configurado" = a env existe e aponta pro relay. Não comparamos com um id
+  // fixo (que difere entre compadre, cumpadi, etc.) — só com o padrão do relay.
+  const notifyConfigured = Boolean(notifyOverride) && notifyOverride.includes(RELAY_PATH_MARKER)
+  const envBlock = `NOTIFY_URL_OVERRIDE=${notifyOverride || "https://SEU-RELAY/api/webhooks/payment/ID_DA_LOJA"}\nRELAY_SECRET=${relaySecret || "COLE_O_SEGREDO_DO_RELAY"}`
 
   return (
     <div className="min-h-screen bg-background">
@@ -154,12 +159,15 @@ export default async function RelayAdminPage() {
                 muted={!notifyOverride}
                 canCopy={Boolean(notifyOverride)}
               />
-              <Field title="notify_url esperado (ultimo registro no relay)" value={RELAY_NOTIFY_URL} />
             </div>
-            {!notifyMatches && (
+            {notifyConfigured ? (
+              <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700">
+                NOTIFY_URL_OVERRIDE aponta pro relay. O gateway so ve o dominio do relay, nunca o desta loja.
+              </div>
+            ) : (
               <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-800">
                 {notifyOverride
-                  ? "NOTIFY_URL_OVERRIDE esta diferente da URL registrada no relay. Atualize a env na Vercel e faca REDEPLOY."
+                  ? "NOTIFY_URL_OVERRIDE nao parece um endpoint de relay (esperado conter /api/webhooks/payment/). Confira o valor e faca REDEPLOY."
                   : "NOTIFY_URL_OVERRIDE ainda nao esta definida neste deployment. Defina a env na Vercel e faca REDEPLOY pro gateway usar o relay."}
               </div>
             )}
