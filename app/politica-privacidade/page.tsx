@@ -23,7 +23,7 @@ export default function PoliticaPrivacidade() {
             <section className="space-y-2">
               <h2 className="text-lg font-semibold text-foreground">1. Introdução</h2>
               <p>
-                A M R COSTEIRA LTDA (CumpadiFood) está comprometida com a proteção da sua privacidade. Esta Política de Privacidade
+                A DCM FOODS DELIVERY LTDA (CumpadiFood) está comprometida com a proteção da sua privacidade. Esta Política de Privacidade
                 descreve como coletamos, usamos e protegemos suas informações pessoais.
               </p>
             </section>
@@ -67,7 +67,7 @@ export default function PoliticaPrivacidade() {
                 pedidos-suporte@cumpadifood.com
               </p>
               <p>
-                <strong className="text-foreground">M R COSTEIRA LTDA</strong> — CNPJ 58.702.190/0002-50
+                <strong className="text-foreground">DCM FOODS DELIVERY LTDA</strong> — CNPJ 65.217.268/0001-25
                 <br />
                 Rua Vereador Francisco Diniz, 80, Anexo A — Trizidela, Barra do Corda - MA — CEP 65.950-000
               </p>

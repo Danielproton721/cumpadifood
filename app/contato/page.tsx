@@ -28,8 +28,8 @@ export default function Contato() {
             <div className="flex items-start gap-3 rounded-lg border border-border p-4">
               <Building2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
               <div className="text-sm">
-                <p className="font-semibold text-foreground">M R COSTEIRA LTDA</p>
-                <p className="text-muted-foreground">CNPJ: 58.702.190/0002-50</p>
+                <p className="font-semibold text-foreground">DCM FOODS DELIVERY LTDA</p>
+                <p className="text-muted-foreground">CNPJ: 65.217.268/0001-25</p>
               </div>
             </div>
 

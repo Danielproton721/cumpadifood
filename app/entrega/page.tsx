@@ -81,7 +81,7 @@ export default function Entrega() {
           </div>
 
           <div className="text-xs text-muted-foreground pt-6 border-t border-border">
-            <p>M R COSTEIRA LTDA — CNPJ 58.702.190/0002-50</p>
+            <p>DCM FOODS DELIVERY LTDA — CNPJ 65.217.268/0001-25</p>
             <p className="mt-1">Última atualização: {new Date().toLocaleDateString("pt-BR")}</p>
           </div>
         </div>

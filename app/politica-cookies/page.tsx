@@ -79,7 +79,7 @@ export default function PoliticaCookies() {
                 Para dúvidas sobre cookies e privacidade, entre em contato pelo e-mail pedidos-suporte@cumpadifood.com
               </p>
               <p>
-                <strong className="text-foreground">M R COSTEIRA LTDA</strong> — CNPJ 58.702.190/0002-50
+                <strong className="text-foreground">DCM FOODS DELIVERY LTDA</strong> — CNPJ 65.217.268/0001-25
                 <br />
                 Rua Vereador Francisco Diniz, 80, Anexo A — Trizidela, Barra do Corda - MA — CEP 65.950-000
               </p>
