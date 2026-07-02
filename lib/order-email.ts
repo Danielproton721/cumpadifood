@@ -39,13 +39,14 @@ export type OrderEmailInput = {
   paymentMethod: "pix" | "card";
 };
 
-// Marca do e-mail configurável por env (cada loja define a sua) — sem isso,
-// mantém o padrão CompadreFood, então o compadre não muda. A logo cai em
-// APP_URL/logo.png se NEXT_PUBLIC_BRAND_LOGO_URL não for definida.
-const BRAND_NAME = process.env.NEXT_PUBLIC_BRAND_NAME?.trim() || "CompadreFood";
+// Marca derivada do domínio da loja (NEXT_PUBLIC_APP_URL, que JÁ existe) — assim
+// a mesma base serve compadre e cumpadi SEM env var nova. Domínio com "cumpadi"
+// = CumpadiFood + logo do mascote; qualquer outro cai no padrão CompadreFood.
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, "") || "https://v0-del-ivery-copia-dany.vercel.app";
-const BRAND_LOGO_URL = process.env.NEXT_PUBLIC_BRAND_LOGO_URL?.trim() || `${APP_URL}/logo.png`;
+const IS_CUMPADI = /cumpadi/i.test(APP_URL);
+const BRAND_NAME = IS_CUMPADI ? "CumpadiFood" : "CompadreFood";
+const BRAND_LOGO_URL = `${APP_URL}/${IS_CUMPADI ? "logo-cumpadi.png" : "logo.png"}`;
 
 // Paleta brand (vermelho dominante + verde pra "confirmado")
 const C = {
