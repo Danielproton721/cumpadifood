@@ -56,7 +56,7 @@ function DeliveryApp() {
         w.dataLayer?.push(arguments)
       }
     }
-    w.gtag("event", "conversion", { send_to: sendTo })
+    w.gtag("event", "conversion", { send_to: sendTo, value: 1.0, currency: "BRL" })
   }, [])
 
   const esquentaProducts = ESQUENTA_IDS

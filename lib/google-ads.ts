@@ -11,8 +11,7 @@
 export const GOOGLE_ADS_ID = "AW-18294614228"
 
 // Rótulos de conversão (a parte DEPOIS da "/" no send_to). Só valem com o ID.
-// Pageview sem rótulo próprio: a tag já registra a visita via gtag('config').
-export const GOOGLE_ADS_PAGEVIEW_LABEL = ""
+export const GOOGLE_ADS_PAGEVIEW_LABEL = "OpfTCMvS_ckcENTRxpNE" // visualização da home
 export const GOOGLE_ADS_PURCHASE_LABEL = "JxLQCNnD6ckcENTRxpNE" // compra confirmada
 
 // Monta o send_to "AW-XXXX/label". Retorna "" se ID ou rótulo faltarem —
