@@ -34,7 +34,7 @@ export default function RootLayout({
       <head>
         {/* Google tag (gtag.js) — carrega só quando GOOGLE_ADS_ID está preenchido
             (lib/google-ads.ts). Vazio = tag desligada, nenhuma conta associada. */}
-        {GOOGLE_ADS_ID && (
+        {GOOGLE_ADS_ID ? (
           <>
             <Script async src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`} strategy="afterInteractive" />
             <Script id="google-gtag" strategy="afterInteractive">
@@ -46,7 +46,7 @@ export default function RootLayout({
               `}
             </Script>
           </>
-        )}
+        ) : null}
       </head>
       <body className={`font-sans antialiased`}>
         <CartProvider>
