@@ -9,7 +9,7 @@ import type { OrderEmailInput } from "@/lib/order-email"
 export const dynamic = "force-dynamic"
 
 // Atraso (em minutos) até checar abandono e disparar o e-mail "esqueceu o carrinho".
-const ABANDONED_DELAY_MIN = 30
+const ABANDONED_DELAY_MIN = 5
 
 // Persiste o snapshot do pedido no KV + marca o gateway + agenda o e-mail de
 // abandono. Compartilhado entre os fluxos Pagou.ai e MedusaPay. Best effort:
