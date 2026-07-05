@@ -569,10 +569,10 @@ export const products: Product[] = [
   },
   {
     id: "67",
-    name: "Cerveja Amstel 269ml 12 Un",
-    description: "Cerveja puro malte em lata compacta",
-    price: 3.09,
-    image: "https://cdn.shopify.com/s/files/1/0794/8750/0511/files/921937-400-auto.avif?v=1769743299",
+    name: "Cerveja Amstel Lager Puro Malte 269ml 12 Un",
+    description: "Cerveja lager puro malte em lata compacta, refrescante",
+    price: 3.13,
+    image: "/products/amstel-269-12un.webp",
     category: "cervejas",
     minQuantity: 12,
     includes: ["1 lata de 269ml"],
@@ -673,6 +673,48 @@ export const products: Product[] = [
     image: "https://cdn.shopify.com/s/files/1/0794/8750/0511/files/00098060_62dae2c5-6c82-470f-8468-684bcec3c59f.webp?v=1769744206",
     category: "cervejas",
     includes: ["1 garrafa de 269ml"],
+    accompaniments: []
+  },
+
+  {
+    id: "glacial-350",
+    name: "Cerveja Glacial 350ml",
+    description: "Cerveja pilsen leve e refrescante, gelada na medida certa",
+    price: 2.49,
+    image: "/products/glacial-350.jpg",
+    category: "cervejas",
+    includes: ["1 lata de 350ml"],
+    accompaniments: []
+  },
+  {
+    id: "skol-pilsen-350",
+    name: "Cerveja Skol Pilsen 350ml",
+    description: "A cerveja que desce redondo, pilsen crocante e refrescante",
+    price: 3.49,
+    image: "/products/skol-pilsen-350.jpg",
+    category: "cervejas",
+    includes: ["1 lata de 350ml"],
+    accompaniments: []
+  },
+  {
+    id: "kaiser-350",
+    name: "Cerveja Kaiser 350ml",
+    description: "Cerveja pilsen tradicional, sabor equilibrado e refrescante",
+    price: 2.99,
+    image: "/products/kaiser-350.jpg",
+    category: "cervejas",
+    includes: ["1 lata de 350ml"],
+    accompaniments: []
+  },
+  {
+    id: "skol-pilsen-473-12un",
+    name: "Cerveja Skol Pilsen 473ml 12 Un",
+    description: "Cerveja pilsen crocante e refrescante em lata de 473ml",
+    price: 4.66,
+    image: "/products/skol-pilsen-473-12un.webp",
+    category: "cervejas",
+    minQuantity: 12,
+    includes: ["1 lata de 473ml"],
     accompaniments: []
   },
 
@@ -1978,6 +2020,16 @@ export const products: Product[] = [
     image: "https://cdn.shopify.com/s/files/1/0807/3173/4230/files/572a6468522c9.webp?v=1771968396",
     category: "churrasco",
     includes: ["1 unidade"],
+    accompaniments: []
+  },
+  {
+    id: "cigarro-dunhill-carlton",
+    name: "Cigarro Dunhill Box Carlton",
+    description: "Cigarro Dunhill Box Carlton, maco com 20 unidades.",
+    price: 12.50,
+    image: "/products/dunhill-box-carlton.png",
+    category: "churrasco",
+    includes: ["1 maco com 20 unidades"],
     accompaniments: []
   },
   {
