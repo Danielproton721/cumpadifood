@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { isAuthed } from "@/lib/admin-auth"
 import { kvConfigured } from "@/lib/kv"
-import { getActiveGateway, setActiveGateway, type GatewayId } from "@/lib/gateways/active"
+import { getActiveGateway, setActiveGateway, isGatewayId } from "@/lib/gateways/active"
 
 export const dynamic = "force-dynamic"
 
@@ -30,8 +30,10 @@ export async function POST(request: Request) {
     body = {}
   }
 
-  const id = body?.gateway as GatewayId
-  if (id !== "pagou" && id !== "medusa") {
+  const id = body?.gateway
+  // Type guard único (aceita todos os gateways de GatewayId) — assim adicionar um
+  // gateway novo em active.ts basta, sem precisar lembrar de editar esta rota.
+  if (!isGatewayId(id)) {
     return NextResponse.json({ error: "Gateway inválido." }, { status: 400 })
   }
 

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { isOrderPaid, kvConfigured } from "@/lib/order-store"
 import { getTxGateway } from "@/lib/gateways/active"
 import { getStatusMedusa } from "@/lib/gateways/medusa"
+import { getStatusCenturion } from "@/lib/gateways/centurion"
 
 export const dynamic = "force-dynamic"
 
@@ -37,8 +38,13 @@ export async function GET(request: Request) {
   // Descobre qual gateway criou essa transação (default Pagou.ai).
   if (kvConfigured()) {
     try {
-      if ((await getTxGateway(txid)) === "medusa") {
+      const gw = await getTxGateway(txid)
+      if (gw === "medusa") {
         const r = await getStatusMedusa(txid)
+        return NextResponse.json({ txid, paid: r.ok ? r.paid : false, status: r.ok ? r.status : "pending" })
+      }
+      if (gw === "centurion") {
+        const r = await getStatusCenturion(txid)
         return NextResponse.json({ txid, paid: r.ok ? r.paid : false, status: r.ok ? r.status : "pending" })
       }
     } catch {

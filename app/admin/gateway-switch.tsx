@@ -7,6 +7,7 @@ import type { GatewayId } from "@/lib/gateways/active"
 const OPTIONS: { id: GatewayId; label: string }[] = [
   { id: "pagou", label: "Pagou.ai" },
   { id: "medusa", label: "MedusaPay" },
+  { id: "centurion", label: "CenturionPay" },
 ]
 
 export function GatewaySwitch({ initial, kvOk }: { initial: GatewayId; kvOk: boolean }) {

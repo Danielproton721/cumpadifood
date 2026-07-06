@@ -33,6 +33,7 @@ const STATUS: Record<AdminOrder["status"], { label: string; cls: string; desc: s
 const GATEWAY: Record<AdminOrder["gateway"], { label: string; cls: string }> = {
   pagou: { label: "Pagou.ai", cls: "bg-sky-100 text-sky-700 border-sky-200" },
   medusa: { label: "MedusaPay", cls: "bg-violet-100 text-violet-700 border-violet-200" },
+  centurion: { label: "CenturionPay", cls: "bg-amber-100 text-amber-700 border-amber-200" },
 }
 
 export default async function AdminPage() {

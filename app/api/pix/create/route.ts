@@ -3,6 +3,7 @@ import { generateOrderCode, kvConfigured, saveOrderSnapshot } from "@/lib/order-
 import { qstashConfigured, scheduleDelayedCall } from "@/lib/qstash"
 import { getActiveGateway, markTxGateway, type GatewayId } from "@/lib/gateways/active"
 import { createPixMedusa, medusaConfigured } from "@/lib/gateways/medusa"
+import { createPixCenturion, centurionConfigured } from "@/lib/gateways/centurion"
 import { getPaymentNotifyUrl } from "@/lib/payment-notify-url"
 import type { OrderEmailInput } from "@/lib/order-email"
 
@@ -175,6 +176,73 @@ export async function POST(request: Request) {
 
     const txid = result.txid ?? null
     await persistPixOrder(txid, order, Number(value), "medusa")
+
+    return NextResponse.json({
+      txid,
+      qrCode: result.qrCode,
+      qrCodeImage: result.qrCodeImage ?? null,
+      expiresAt: result.expiresAt ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+      status: result.paymentStatus ?? "pending",
+      paid: isPaidStatus(result.paymentStatus),
+      amount: value,
+      phone: phoneDigits,
+    })
+  }
+
+  // ── CenturionPay (SEM relay: postback aponta direto pro webhook da loja) ──
+  if (activeGateway === "centurion") {
+    if (!centurionConfigured()) {
+      console.error("[PIX API] CENTURION_API_KEY ausente no ambiente.")
+      return NextResponse.json({ error: "Erro interno: CenturionPay não configurada." }, { status: 500 })
+    }
+
+    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "").replace(/\/$/, "")
+    const wsecret = process.env.PAGOUAI_WEBHOOK_SECRET || ""
+    const postbackUrl = appUrl
+      ? `${appUrl}/api/webhook/centurion${wsecret ? `?secret=${encodeURIComponent(wsecret)}` : ""}`
+      : undefined
+
+    // Endereço do comprador (a doc da Centurion inclui customer.address / shipping).
+    const a = order?.address
+    const address =
+      a && a.cep
+        ? {
+            cep: String(a.cep || ""),
+            street: String(a.street || ""),
+            number: String(a.number || ""),
+            complement: a.complement ? String(a.complement) : undefined,
+            neighborhood: String(a.neighborhood || ""),
+            city: String(a.city || ""),
+            stateUF: String(a.stateUF || ""),
+          }
+        : undefined
+
+    const result = await createPixCenturion({
+      amountCents,
+      name: name.trim(),
+      email: email.trim(),
+      cpfDigits,
+      phoneDigits,
+      ip: buyerIp,
+      title: title || "Pedido CumpadiFood",
+      postbackUrl,
+      address,
+    })
+
+    if (!result.ok) {
+      console.error(`[PIX/Centurion] Erro (${result.status}):`, result.error)
+      if (result.status === 401) {
+        return NextResponse.json({ error: "Chave de autenticação inválida na CenturionPay." }, { status: 401 })
+      }
+      return NextResponse.json({ error: result.error || "Falha na CenturionPay.", gateway: result.raw }, { status: 502 })
+    }
+    if (!result.qrCode) {
+      console.error("[PIX/Centurion] Sucesso, mas sem QR Code:", JSON.stringify(result.raw))
+      return NextResponse.json({ error: "CenturionPay não retornou QR Code PIX válido." }, { status: 502 })
+    }
+
+    const txid = result.txid ?? null
+    await persistPixOrder(txid, order, Number(value), "centurion")
 
     return NextResponse.json({
       txid,
