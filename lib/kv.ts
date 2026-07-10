@@ -86,3 +86,27 @@ export async function kvZCard(key: string): Promise<number> {
   const res = await command(["ZCARD", pk(key)])
   return typeof res === "number" ? res : Number(res) || 0
 }
+
+// --- HyperLogLog (visitantes únicos por dia) --------------------------------
+// Conta únicos APROXIMADOS com memória ~fixa e barata (1 comando por add/leitura).
+
+export async function kvPfAdd(key: string, member: string): Promise<void> {
+  await command(["PFADD", pk(key), member])
+}
+
+export async function kvPfCount(key: string): Promise<number> {
+  const res = await command(["PFCOUNT", pk(key)])
+  return typeof res === "number" ? res : Number(res) || 0
+}
+
+// Cardinalidade da UNIÃO de vários HLLs em 1 comando (PFCOUNT k1 k2 ...).
+// Serve pra "quantos únicos no período" sem somar dias (pessoa repetida conta 1x).
+export async function kvPfCountUnion(keys: string[]): Promise<number> {
+  if (keys.length === 0) return 0
+  const res = await command(["PFCOUNT", ...keys.map(pk)])
+  return typeof res === "number" ? res : Number(res) || 0
+}
+
+export async function kvExpire(key: string, seconds: number): Promise<void> {
+  await command(["EXPIRE", pk(key), seconds])
+}

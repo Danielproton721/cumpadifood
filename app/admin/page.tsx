@@ -7,6 +7,7 @@ import { AdminLogin } from "./admin-login"
 import { LogoutButton } from "./logout-button"
 import { GatewaySwitch } from "./gateway-switch"
 import { OnlineCount } from "./online-count"
+import { VisitorsHistory } from "./visitors-history"
 
 export const dynamic = "force-dynamic"
 
@@ -84,6 +85,8 @@ export default async function AdminPage() {
         </div>
 
         <GatewaySwitch initial={activeGateway} kvOk={kvConfigured()} />
+
+        <VisitorsHistory />
 
         {!kvConfigured() && (
           <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
