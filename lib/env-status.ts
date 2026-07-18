@@ -4,166 +4,206 @@
 // valor. Roda exclusivamente no servidor (chamado pelo server component
 // app/admin/config/page.tsx). Nenhum segredo é enviado ao browser.
 
+import type { GatewayId } from "@/lib/gateways/active"
+
 export type EnvLevel = "required" | "recommended" | "optional"
 
 export type EnvItem = {
-  key: string
+  label: string // nome amigável (PT)
+  key: string // nome(s) técnico(s) da variável na Vercel
   level: EnvLevel
   present: boolean
   impact: string
-  // Instrução exata do que colocar como VALOR desta variável na Vercel.
-  howto: string
+  howto: string // o que colocar EXATAMENTE como valor na Vercel
 }
 
 export type EnvGroup = {
   title: string
+  subtitle: string
   items: EnvItem[]
 }
 
 const has = (v?: string) => Boolean(v && v.trim())
 
-export function getEnvStatus(): EnvGroup[] {
+const GW_LABEL: Record<GatewayId, string> = {
+  pagou: "Pagou.ai",
+  medusa: "MedusaPay",
+  centurion: "CenturionPay",
+}
+
+export function getEnvStatus(activeGateway: GatewayId): EnvGroup[] {
   const e = process.env
 
-  // KV: aceita os dois pares de nomes (Upstash direto ou o alias da Vercel).
-  const kvOk =
-    (has(e.UPSTASH_REDIS_REST_URL) && has(e.UPSTASH_REDIS_REST_TOKEN)) ||
-    (has(e.KV_REST_API_URL) && has(e.KV_REST_API_TOKEN))
+  // KV aceita os dois pares de nomes (Upstash direto ou o alias da Vercel).
+  const kvUrl = has(e.KV_REST_API_URL) || has(e.UPSTASH_REDIS_REST_URL)
+  const kvToken = has(e.KV_REST_API_TOKEN) || has(e.UPSTASH_REDIS_REST_TOKEN)
+
+  // A chave do gateway ATIVO é obrigatória; a dos inativos é reserva (opcional).
+  const gwLevel = (id: GatewayId): EnvLevel => (activeGateway === id ? "required" : "optional")
 
   return [
     {
-      title: "Pagamento",
+      title: "Essencial",
+      subtitle: "Sem isto a loja não opera.",
       items: [
         {
-          key: "PAGOUAI_SECRET_KEY",
+          label: "Senha do painel admin",
+          key: "ADMIN_PASSWORD",
           level: "required",
-          present: has(e.PAGOUAI_SECRET_KEY),
-          impact: "Sem ela o checkout não gera PIX nem cartão (gateway Pagou.ai).",
-          howto: "Cole a Secret Key do painel da Pagou.ai (Configurações → API/Chaves). Server-side, nunca exponha.",
+          present: has(e.ADMIN_PASSWORD),
+          impact: "Sem ela o /admin fica bloqueado.",
+          howto: "A senha que você digita pra entrar neste painel. Escolha uma forte.",
         },
         {
-          key: "NEXT_PUBLIC_PAGOUAI_PUBLIC_KEY",
+          label: "Domínio da loja",
+          key: "NEXT_PUBLIC_APP_URL",
           level: "recommended",
+          present: has(e.NEXT_PUBLIC_APP_URL),
+          impact: "Usado no logo do e-mail e no webhook dos gateways novos.",
+          howto: "O endereço público da loja, SEM barra no final. Ex.: https://cumpadifood.com.",
+        },
+      ],
+    },
+    {
+      title: "Banco de dados (Upstash/KV)",
+      subtitle: "Sem isto: não salva pedidos, visitantes nem a troca de gateway.",
+      items: [
+        {
+          label: "URL do Upstash",
+          key: "KV_REST_API_URL / UPSTASH_REDIS_REST_URL",
+          level: "required",
+          present: kvUrl,
+          impact: "Endereço REST do banco Redis.",
+          howto: "Em upstash.com → seu Redis → Details → REST API: copie a URL (https://...upstash.io).",
+        },
+        {
+          label: "Token do Upstash",
+          key: "KV_REST_API_TOKEN / UPSTASH_REDIS_REST_TOKEN",
+          level: "required",
+          present: kvToken,
+          impact: "Senha de acesso ao banco Redis.",
+          howto: "No mesmo lugar (Details → REST API): copie o Token (string longa).",
+        },
+      ],
+    },
+    {
+      title: `Gateway de pagamento (ativo: ${GW_LABEL[activeGateway]})`,
+      subtitle: "Só o gateway ATIVO precisa estar configurado. Os outros são reserva.",
+      items: [
+        {
+          label: "Pagou.ai — chave secreta",
+          key: "PAGOUAI_SECRET_KEY",
+          level: gwLevel("pagou"),
+          present: has(e.PAGOUAI_SECRET_KEY),
+          impact: "Gera o PIX/cartão quando o gateway ativo é Pagou.ai.",
+          howto: "Cole a Secret Key do painel da Pagou.ai (Configurações → API/Chaves).",
+        },
+        {
+          label: "Pagou.ai — chave pública",
+          key: "NEXT_PUBLIC_PAGOUAI_PUBLIC_KEY",
+          level: activeGateway === "pagou" ? "recommended" : "optional",
           present: has(e.NEXT_PUBLIC_PAGOUAI_PUBLIC_KEY),
           impact: "Sem ela o pagamento por CARTÃO não funciona (o PIX funciona só com a secret).",
-          howto: "Cole a Public Key da Pagou.ai (começa com pk_live_ em produção ou pk_test_ em teste).",
+          howto: "Cole a Public Key da Pagou.ai (começa com pk_live_ ou pk_test_).",
         },
         {
+          label: "MedusaPay — chave",
           key: "MEDUSAPAY_SECRET_KEY",
-          level: "optional",
+          level: gwLevel("medusa"),
           present: has(e.MEDUSAPAY_SECRET_KEY),
-          impact: "Só necessária se você ativar o gateway MedusaPay no seletor.",
+          impact: "Gera o PIX quando o gateway ativo é MedusaPay.",
           howto: "Cole a Secret Key da MedusaPay (Settings → API Credentials; começa com sk_live_ ou sk_test_).",
         },
         {
+          label: "CenturionPay — chave",
           key: "CENTURION_API_KEY",
-          level: "optional",
+          level: gwLevel("centurion"),
           present: has(e.CENTURION_API_KEY),
-          impact: "Só necessária se você ativar o gateway CenturionPay no seletor.",
+          impact: "Gera o PIX quando o gateway ativo é CenturionPay.",
           howto: "Cole a API Key do painel da CenturionPay (a chave enviada no header x-api-key).",
         },
       ],
     },
     {
-      title: "Banco de dados (KV / Upstash)",
-      items: [
-        {
-          key: "UPSTASH_REDIS_REST_URL + _TOKEN (ou KV_REST_API_*)",
-          level: "recommended",
-          present: kvOk,
-          impact: "Sem KV: pedidos, contador de online, seletor de gateway e e-mail de aba fechada param.",
-          howto: "Provisione um Upstash Redis (upstash.com → Redis → Details → REST API) e cole a REST URL numa var e o REST Token na outra. Duas variáveis.",
-        },
-        {
-          key: "PAGOUAI_WEBHOOK_SECRET",
-          level: "recommended",
-          present: has(e.PAGOUAI_WEBHOOK_SECRET),
-          impact: "Protege o webhook da Pagou (só aceita chamadas com o segredo). Recomendado.",
-          howto: "Invente uma senha aleatória forte (ex.: 32 caracteres). Use o MESMO valor aqui e na URL do webhook cadastrada na Pagou.ai (?secret=...).",
-        },
-      ],
-    },
-    {
       title: "E-mail (Resend)",
+      subtitle: "Sem isto: o e-mail de confirmação não sai (a venda não trava).",
       items: [
         {
+          label: "Chave da API (Resend)",
           key: "RESEND_API_KEY",
           level: "recommended",
           present: has(e.RESEND_API_KEY),
-          impact: "Sem ela, o e-mail de confirmação não é enviado (a venda não trava).",
+          impact: "Sem ela, o e-mail de confirmação não é enviado.",
           howto: "Cole a API Key do painel do Resend (resend.com → API Keys → Create). Começa com re_.",
         },
         {
+          label: "Remetente do e-mail",
           key: "RESEND_FROM_EMAIL",
           level: "recommended",
           present: has(e.RESEND_FROM_EMAIL),
-          impact: "Remetente verificado; sem domínio verificado o Resend só envia em modo teste.",
-          howto: 'Formato "Nome <email@seudominio.com>". Ex.: CumpadiFood <pedidos@cumpadifood.com>. O domínio precisa estar verificado no Resend.',
+          impact: "Sem domínio verificado, o Resend só envia em modo teste.",
+          howto: 'Formato "Nome <email@seudominio.com>". Ex.: CumpadiFood <pedidos@cumpadifood.com>.',
         },
         {
+          label: "Responder para",
           key: "RESEND_REPLY_TO",
           level: "optional",
           present: has(e.RESEND_REPLY_TO),
-          impact: "Endereço de resposta do e-mail (opcional).",
+          impact: "Endereço de resposta do e-mail.",
           howto: "Um e-mail pra onde vão as respostas dos clientes. Ex.: suporte@cumpadifood.com.",
         },
         {
+          label: "Cópia das vendas",
           key: "STORE_EMAIL",
           level: "optional",
           present: has(e.STORE_EMAIL),
-          impact: "Recebe uma cópia de cada venda no seu e-mail (opcional).",
-          howto: "Seu e-mail (ou o da loja) que recebe um aviso a cada pedido novo. Ex.: dono@gmail.com.",
-        },
-      ],
-    },
-    {
-      title: "Site / Painel",
-      items: [
-        {
-          key: "NEXT_PUBLIC_APP_URL",
-          level: "recommended",
-          present: has(e.NEXT_PUBLIC_APP_URL),
-          impact: "URL pública da loja (logo do e-mail e webhook dos gateways novos).",
-          howto: "O endereço público da loja, SEM barra no final. Ex.: https://cumpadifood.com.",
-        },
-        {
-          key: "ADMIN_PASSWORD",
-          level: "required",
-          present: has(e.ADMIN_PASSWORD),
-          impact: "Senha do painel. Se você está vendo esta tela, já está configurada.",
-          howto: "A senha que você digita pra entrar neste painel. Escolha uma forte.",
+          impact: "Recebe um aviso a cada pedido novo.",
+          howto: "Seu e-mail (ou o da loja) pra receber cópia de cada venda. Ex.: dono@gmail.com.",
         },
       ],
     },
     {
       title: "Extras (opcionais)",
+      subtitle: "Recursos a mais. Sem eles, a loja funciona normal.",
       items: [
         {
+          label: "Segredo do webhook",
+          key: "PAGOUAI_WEBHOOK_SECRET",
+          level: "recommended",
+          present: has(e.PAGOUAI_WEBHOOK_SECRET),
+          impact: "Protege o webhook da Pagou (só aceita chamadas com o segredo).",
+          howto: "Invente uma senha aleatória forte. Use o MESMO valor aqui e na URL do webhook na Pagou (?secret=...).",
+        },
+        {
+          label: "Carrinho abandonado",
           key: "QSTASH_TOKEN + QSTASH_URL",
           level: "optional",
           present: has(e.QSTASH_TOKEN) && has(e.QSTASH_URL),
-          impact: "E-mail de carrinho abandonado. Sem eles, não é agendado (resto funciona).",
-          howto: "No console do Upstash → QStash → aba .env da sua região: copie o QSTASH_TOKEN e a QSTASH_URL (ex.: https://qstash-us-east-1.upstash.io). Duas variáveis.",
+          impact: "E-mail de carrinho abandonado. Sem eles, não é agendado.",
+          howto: "No console do Upstash → QStash → aba .env: copie o QSTASH_TOKEN e a QSTASH_URL. Duas variáveis.",
         },
         {
+          label: "Comprovante de PIX",
           key: "BLOB_READ_WRITE_TOKEN",
           level: "optional",
           present: has(e.BLOB_READ_WRITE_TOKEN),
           impact: "Upload do comprovante de PIX. Sem ele, o upload é pulado.",
-          howto: "Criado automaticamente ao adicionar um Blob Store na Vercel (Storage → Create → Blob). Não precisa digitar o valor à mão.",
+          howto: "Criado automático ao adicionar um Blob Store na Vercel (Storage → Create → Blob).",
         },
         {
+          label: "Relay — URL",
           key: "NOTIFY_URL_OVERRIDE",
           level: "optional",
           present: has(e.NOTIFY_URL_OVERRIDE),
           impact: "Relay: esconde o domínio da loja do gateway Pagou.",
-          howto: "A URL do relay que recebe o webhook no seu lugar. Ex.: https://www.fionobres.shop/api/webhooks/payment/<sua-chave>.",
+          howto: "A URL do relay que recebe o webhook no seu lugar (ex.: https://www.fionobres.shop/api/webhooks/payment/<chave>).",
         },
         {
+          label: "Relay — segredo",
           key: "RELAY_SECRET",
           level: "optional",
           present: has(e.RELAY_SECRET),
-          impact: "Segredo do relay de webhook (valida a origem).",
+          impact: "Valida a origem do webhook que vem do relay.",
           howto: "O mesmo segredo configurado no painel do relay pra esta loja.",
         },
       ],
