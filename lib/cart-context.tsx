@@ -8,8 +8,10 @@ const STORAGE_KEY = "compadrefood-cart"
 const COUPON_KEY = "compadrefood-coupon"
 
 // Cupons válidos: código (MAIÚSCULO) -> percentual de desconto (0.05 = 5%).
-// COPA e COPA5 fazem a mesma coisa (a arte do banner anuncia "COPA").
+// PRIMEIRA = cupom de primeira compra (5%). COPA/COPA5 mantidos como alias
+// (retrocompat: quem já pegou o cupom antigo continua funcionando).
 const COUPONS: Record<string, number> = {
+  PRIMEIRA: 0.05,
   COPA: 0.05,
   COPA5: 0.05,
 }
