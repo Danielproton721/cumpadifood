@@ -156,14 +156,6 @@ export function getEnvStatus(activeGateway: GatewayId): EnvGroup[] {
           impact: "Pra onde vão as respostas quando o CLIENTE responde o e-mail.",
           howto: "Um e-mail SEU. Quando o cliente clicar em 'Responder' no e-mail de confirmação, vai pra este endereço. Ex.: pedidos-suporte@cumpadifood.com.",
         },
-        {
-          label: "Cópia das vendas",
-          key: "STORE_EMAIL",
-          level: "optional",
-          present: has(e.STORE_EMAIL),
-          impact: "Você recebe um aviso a cada venda nova.",
-          howto: "Um e-mail SEU pra receber um aviso 'vendeu!' a cada pedido. Pode ser o mesmo de cima ou seu Gmail. Ex.: pedidos-suporte@cumpadifood.com.",
-        },
       ],
     },
     {
