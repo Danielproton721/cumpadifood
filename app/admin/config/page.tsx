@@ -3,6 +3,7 @@ import { ArrowLeft, CheckCircle2, XCircle, AlertTriangle, MinusCircle, KeyRound 
 import { adminConfigured, isAuthed } from "@/lib/admin-auth"
 import { getEnvStatus, type EnvItem } from "@/lib/env-status"
 import { AdminLogin } from "../admin-login"
+import { RefreshButton } from "./refresh-button"
 
 export const dynamic = "force-dynamic"
 
@@ -71,12 +72,15 @@ export default async function AdminConfigPage() {
               Status das variáveis de ambiente. Mostra só se está preenchida — nunca o valor.
             </p>
           </div>
-          <Link
-            href="/admin"
-            className="inline-flex h-9 items-center gap-2 self-start rounded-lg border border-border bg-card px-3 text-xs font-bold text-foreground transition hover:bg-muted"
-          >
-            <ArrowLeft className="h-4 w-4" /> Voltar
-          </Link>
+          <div className="flex items-center gap-2 self-start">
+            <RefreshButton />
+            <Link
+              href="/admin"
+              className="inline-flex h-9 items-center gap-2 rounded-lg border border-border bg-card px-3 text-xs font-bold text-foreground transition hover:bg-muted"
+            >
+              <ArrowLeft className="h-4 w-4" /> Voltar
+            </Link>
+          </div>
         </div>
 
         {/* Resumo */}
@@ -122,6 +126,9 @@ export default async function AdminConfigPage() {
                     <div className="min-w-0">
                       <code className="break-all font-mono text-sm font-semibold text-foreground">{item.key}</code>
                       <p className="mt-0.5 text-xs text-muted-foreground">{item.impact}</p>
+                      <p className="mt-1.5 rounded-md bg-muted px-2 py-1.5 text-xs text-foreground">
+                        <span className="font-semibold">Na Vercel, coloque:</span> {item.howto}
+                      </p>
                     </div>
                     <div className="shrink-0">
                       <StatusBadge item={item} />
