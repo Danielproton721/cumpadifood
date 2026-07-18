@@ -6,22 +6,14 @@ import { useState, useEffect, useCallback } from "react"
 const banners = [
   {
     id: 1,
-    src: "/banners/banner-deu-fome.png",
-    alt: "Deu fome no jogo? Petisco quentinho na sua casa antes do apito",
-    ratio: "1752 / 898",
-    action: "category" as const,
-    categoryLink: "comida",
-  },
-  {
-    id: 2,
-    src: "/banners/banner-esquenta.png",
-    alt: "Esquenta do jogo — cerveja gelada e petisco na sua casa",
-    ratio: "1898 / 829",
+    src: "/banners/banner-24h.png",
+    alt: "Bebida gelada na sua porta — aberta agora, entrega em minutos na sua região",
+    ratio: "1672 / 941",
     action: "category" as const,
     categoryLink: "cervejas",
   },
   {
-    id: 3,
+    id: 2,
     src: "/banners/banner2.webp",
     alt: "Monte seu combo! Precos imbativeis com 30% OFF",
     ratio: "16 / 7",
