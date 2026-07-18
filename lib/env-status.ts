@@ -41,6 +41,10 @@ export function getEnvStatus(activeGateway: GatewayId): EnvGroup[] {
   // A chave do gateway ATIVO é obrigatória; a dos inativos é reserva (opcional).
   const gwLevel = (id: GatewayId): EnvLevel => (activeGateway === id ? "required" : "optional")
 
+  // Relay ligado? Com RELAY_SECRET, o webhook valida por ele e IGNORA o
+  // PAGOUAI_WEBHOOK_SECRET — então este último deixa de ser necessário.
+  const relayOn = has(e.RELAY_SECRET)
+
   return [
     {
       title: "Essencial",
@@ -169,10 +173,15 @@ export function getEnvStatus(activeGateway: GatewayId): EnvGroup[] {
         {
           label: "Segredo do webhook",
           key: "PAGOUAI_WEBHOOK_SECRET",
-          level: "recommended",
+          // Com o relay ligado (RELAY_SECRET), este não é usado — vira opcional.
+          level: relayOn ? "optional" : "recommended",
           present: has(e.PAGOUAI_WEBHOOK_SECRET),
-          impact: "Protege o webhook da Pagou (só aceita chamadas com o segredo).",
-          howto: "Invente uma senha aleatória forte. Use o MESMO valor aqui e na URL do webhook na Pagou (?secret=...).",
+          impact: relayOn
+            ? "NÃO é necessário: o relay está ativo, quem protege o webhook é o RELAY_SECRET."
+            : "Protege o webhook da Pagou quando ele é chamado DIRETO (sem relay).",
+          howto: relayOn
+            ? "Pode deixar vazio. Com o relay ligado, esta chave é ignorada (o RELAY_SECRET faz o papel dela)."
+            : "Invente uma senha aleatória forte. Use o MESMO valor aqui e na URL do webhook na Pagou (?secret=...).",
         },
         {
           label: "Carrinho abandonado",
