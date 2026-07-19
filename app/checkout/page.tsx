@@ -307,6 +307,11 @@ function CheckoutContent() {
   // PIX State
   const [isGeneratingPix, setIsGeneratingPix] = useState(false);
   const [pixData, setPixData] = useState<{ qrCode: string, qrCodeImage: string | null, expiresAt?: string, txid?: string | null } | null>(null);
+  const [pixCopied, setPixCopied] = useState(false);
+  // Reserva do pedido/desconto: 15 min de countdown (urgência real — a loja honra
+  // o desconto nesse prazo). NÃO mexe na expiração do código no gateway.
+  const PIX_RESERVE_SECONDS = 15 * 60;
+  const [pixSecondsLeft, setPixSecondsLeft] = useState(PIX_RESERVE_SECONDS);
   const [pixError, setPixError] = useState<string | null>(null);
   const [pixProof, setPixProof] = useState<PixProof | null>(null);
   const [pixProofError, setPixProofError] = useState<string | null>(null);
@@ -759,12 +764,33 @@ function CheckoutContent() {
     };
   }, [cpf, email, issueOrderCode, orderCode, paymentConfirmed, pixData?.txid]);
 
-  const handleCopyPix = () => {
-    if (pixData?.qrCode) {
-      navigator.clipboard.writeText(pixData.qrCode);
-      alert('Código PIX copiado!');
+  const handleCopyPix = async () => {
+    if (!pixData?.qrCode) return;
+    try {
+      await navigator.clipboard.writeText(pixData.qrCode);
+    } catch {
+      // alguns navegadores bloqueiam o clipboard; segue sem travar
     }
+    setPixCopied(true);
+    setTimeout(() => setPixCopied(false), 2500);
   };
+
+  // Countdown de 15 min da reserva do PIX (só visual/urgência; reinicia a cada
+  // novo PIX gerado).
+  useEffect(() => {
+    if (!pixData) {
+      setPixSecondsLeft(PIX_RESERVE_SECONDS);
+      return;
+    }
+    const start = Date.now();
+    setPixSecondsLeft(PIX_RESERVE_SECONDS);
+    const timer = setInterval(() => {
+      const left = PIX_RESERVE_SECONDS - Math.floor((Date.now() - start) / 1000);
+      setPixSecondsLeft(left > 0 ? left : 0);
+      if (left <= 0) clearInterval(timer);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [pixData]);
 
   const handlePixProofChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -1705,6 +1731,14 @@ function CheckoutContent() {
                       <>
                         <h3 className="font-bold text-gray-800 mb-1">Pague com PIX e libere envio na hora</h3>
                         <p className="text-sm text-gray-500 mb-4">Aprovação em segundos. Clique no botão abaixo para gerar seu PIX.</p>
+                        {discount > 0 && (
+                          <div className="mb-4 w-full max-w-sm rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5">
+                            <p className="text-sm font-black text-emerald-700">
+                              🎁 Seus {coupon ? `${coupon} — ` : ''}R$ {discount.toFixed(2).replace('.', ',')} de desconto já estão aplicados
+                            </p>
+                            <p className="text-[11px] font-medium text-emerald-600">Válido pagando com PIX agora — de R$ {totalPrice.toFixed(2).replace('.', ',')} por R$ {checkoutTotal.toFixed(2).replace('.', ',')}.</p>
+                          </div>
+                        )}
                         <div className="flex flex-wrap justify-center gap-3 text-xs font-bold text-emerald-600 mb-2">
                           <span>✓ Aprovação instantânea</span>
                           <span>✓ Sem taxas extras</span>
@@ -1714,22 +1748,66 @@ function CheckoutContent() {
                       </>
                     ) : (
                       <>
-                        <h3 className="font-bold text-emerald-600 mb-2">PIX Gerado com Sucesso!</h3>
-                        <div className="mb-3 w-full max-w-sm rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs font-bold text-amber-800">
-                          Este QR Code expira em 10 minutos. Pague antes desse prazo para evitar gerar um novo PIX.
+                        <h3 className="font-bold text-emerald-600 mb-1">PIX gerado! Falta só pagar 🎉</h3>
+
+                        {/* Timer de reserva (countdown real de 15 min) */}
+                        <div className="mb-3 w-full max-w-sm rounded-xl border-2 border-[#e23744]/30 bg-[#e23744]/5 px-4 py-3">
+                          <p className="text-[11px] font-bold uppercase tracking-wide text-gray-500">Seu pedido está reservado</p>
+                          <p className="mt-0.5 text-3xl font-black leading-none tabular-nums text-[#e23744]">
+                            {String(Math.floor(pixSecondsLeft / 60)).padStart(2, '0')}:{String(pixSecondsLeft % 60).padStart(2, '0')}
+                          </p>
+                          <p className="mt-0.5 text-[11px] font-medium text-gray-500">
+                            {pixSecondsLeft > 0
+                              ? 'Pague dentro do prazo pra garantir o preço e a entrega rápida.'
+                              : 'A reserva expirou — mas você ainda pode pagar o código gerado.'}
+                          </p>
                         </div>
-                        <div className="w-44 h-44 bg-white border-2 border-emerald-100 rounded-2xl p-3 mx-auto mb-4 shadow-sm relative">
-                          <img 
-                            src={pixData.qrCodeImage || `https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=0&data=${encodeURIComponent(pixData.qrCode)}`} 
-                            alt="QR Code PIX" 
-                            className="w-full h-full object-contain mix-blend-multiply" 
+
+                        {/* O prêmio: o que já está indo pra porta */}
+                        <div className="mb-3 w-full max-w-sm rounded-xl border border-gray-200 bg-white p-3 text-left shadow-sm">
+                          <p className="mb-2 text-xs font-extrabold text-gray-900">🍻 Já indo pra sua porta:</p>
+                          <ul className="space-y-1">
+                            {items.slice(0, 4).map((it) => (
+                              <li key={it.id} className="flex items-center gap-2 text-xs text-gray-600">
+                                <span className="font-black text-[#e23744]">{it.quantity}×</span>
+                                <span className="truncate">{it.name}</span>
+                              </li>
+                            ))}
+                            {items.length > 4 && (
+                              <li className="text-xs font-medium text-gray-400">+ {items.length - 4} item(s)</li>
+                            )}
+                          </ul>
+                          <p className="mt-2 border-t border-gray-100 pt-2 text-[11px] font-bold text-emerald-600">🛵 Entrega grátis em até 1 hora</p>
+                        </div>
+
+                        {/* Reforço do desconto de primeira compra */}
+                        {discount > 0 && (
+                          <div className="mb-3 w-full max-w-sm rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-left">
+                            <p className="text-xs font-bold text-emerald-700">✓ Desconto de primeira compra aplicado</p>
+                            <p className="text-[11px] font-medium text-emerald-600">
+                              Você economizou <span className="font-black">R$ {discount.toFixed(2).replace('.', ',')}</span> pagando com PIX agora.
+                            </p>
+                          </div>
+                        )}
+
+                        {/* QR */}
+                        <div className="w-44 h-44 bg-white border-2 border-emerald-100 rounded-2xl p-3 mx-auto mb-3 shadow-sm relative">
+                          <img
+                            src={pixData.qrCodeImage || `https://api.qrserver.com/v1/create-qr-code/?size=250x250&margin=0&data=${encodeURIComponent(pixData.qrCode)}`}
+                            alt="QR Code PIX"
+                            className="w-full h-full object-contain mix-blend-multiply"
                           />
                         </div>
-                        <p className="text-xs text-gray-500 mb-2">Ou copie o código abaixo (PIX Copia e Cola):</p>
-                        <div className="flex items-center gap-2 w-full max-w-sm">
-                          <input type="text" readOnly value={pixData.qrCode} className="flex-1 bg-white text-gray-700 text-xs p-3 rounded-xl border border-gray-200 font-mono focus:outline-none" />
-                          <button onClick={handleCopyPix} className="bg-[#e23744] text-[#1a1a1a] text-xs font-bold px-4 py-3 rounded-xl hover:bg-[#e23744]/80 transition-colors">COPIAR</button>
-                        </div>
+
+                        {/* Botão copiar GIGANTE com feedback visual */}
+                        <button
+                          onClick={handleCopyPix}
+                          className={`flex h-14 w-full max-w-sm items-center justify-center gap-2 rounded-2xl text-base font-black text-white shadow-sm transition-colors ${pixCopied ? 'bg-emerald-600' : 'bg-[#e23744] hover:bg-[#c41f33]'}`}
+                        >
+                          {pixCopied ? (<><Check className="h-5 w-5" /> Código copiado!</>) : (<><Copy className="h-5 w-5" /> Copiar código PIX</>)}
+                        </button>
+                        <input type="text" readOnly value={pixData.qrCode} className="mt-2 w-full max-w-sm truncate rounded-xl border border-gray-200 bg-white p-2.5 text-center font-mono text-[11px] text-gray-500 focus:outline-none" />
+
                         <div className="mt-4 flex w-full max-w-sm items-center justify-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-4 shadow-sm">
                           <Loader2 className="h-5 w-5 shrink-0 animate-spin text-emerald-600" />
                           <div className="text-left">
