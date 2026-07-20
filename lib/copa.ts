@@ -16,7 +16,9 @@ export interface JogoCopa {
   local?: string
 }
 
-export const COPA_FORCAR_OFF = false
+// A Copa acabou — modo desligado de vez (banner, countdown, coleção "Esquenta",
+// faixas e o anúncio do cupom COPA não aparecem mais, em qualquer data).
+export const COPA_FORCAR_OFF = true
 
 export const JOGOS_COPA: JogoCopa[] = [
   { titulo: "Brasil x Marrocos", data: "2026-06-13T19:00:00-03:00", quando: "sáb 13/06 · 19h", local: "Nova York" },
