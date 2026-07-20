@@ -9,7 +9,7 @@ const COUPON_CODE = "PRIMEIRA"
 // pra não aparecer colado no fechamento desses popups.
 const DELAY_AFTER_READY_MS = 7000
 
-// Popup promocional da home: oferece o cupom de PRIMEIRA COMPRA (5% OFF).
+// Popup promocional da home: oferece o cupom de PRIMEIRA COMPRA (10% OFF).
 // Aparece a cada carregamento, mas só começa a contar o tempo depois que o
 // age-gate (localStorage `age_verified`) e a localização (localStorage
 // `delivery_address`) já foram resolvidos. `suppressed` reflete o popup de
@@ -99,7 +99,7 @@ export function CouponPopup({ suppressed = false }: { suppressed?: boolean }) {
             Presente de boas-vindas
           </p>
           <p className="mt-1 text-5xl font-black leading-none">
-            5% <span className="text-promo">OFF</span>
+            10% <span className="text-promo">OFF</span>
           </p>
           <p className="mt-2 text-sm font-bold">na sua primeira compra 🍻</p>
         </div>
@@ -135,7 +135,7 @@ export function CouponPopup({ suppressed = false }: { suppressed?: boolean }) {
             </p>
           ) : (
             <p className="text-center text-xs text-muted-foreground">
-              Copie e use no carrinho pra garantir <span className="font-bold text-foreground">5% de desconto</span> na primeira compra.
+              Copie e use no carrinho pra garantir <span className="font-bold text-foreground">10% de desconto</span> na primeira compra.
             </p>
           )}
         </div>

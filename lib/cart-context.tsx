@@ -7,11 +7,12 @@ import type { CartItem, Product, Additional } from "./types"
 const STORAGE_KEY = "compadrefood-cart"
 const COUPON_KEY = "compadrefood-coupon"
 
-// Cupons válidos: código (MAIÚSCULO) -> percentual de desconto (0.05 = 5%).
-// PRIMEIRA = cupom de primeira compra (5%). COPA/COPA5 mantidos como alias
-// (retrocompat: quem já pegou o cupom antigo continua funcionando).
+// Cupons válidos: código (MAIÚSCULO) -> percentual de desconto (0.10 = 10%).
+// PRIMEIRA = cupom de primeira compra (10%) — usado como alavanca de "pague o
+// PIX agora". COPA/COPA5 mantidos como alias retrocompat no valor antigo (5%),
+// pra honrar quem já tinha pego o cupom de Copa.
 const COUPONS: Record<string, number> = {
-  PRIMEIRA: 0.05,
+  PRIMEIRA: 0.10,
   COPA: 0.05,
   COPA5: 0.05,
 }
