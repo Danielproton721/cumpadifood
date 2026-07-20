@@ -41,6 +41,9 @@ async function persistPixOrder(
       subtotal: Number(order.subtotal) || Number(value),
       shipping: Number(order.shipping) || 0,
       total: Number(order.total) || Number(value),
+      // gclid do Google Ads (medição futura). Campo a mais no pedido; se não
+      // veio de anúncio, fica sem — sem erro, não muda nada no fluxo.
+      ...(order.gclid ? { gclid: String(order.gclid) } : {}),
     }
     await saveOrderSnapshot(String(txid), snapshot, Date.now())
     await markTxGateway(String(txid), gateway)

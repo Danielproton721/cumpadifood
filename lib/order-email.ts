@@ -37,6 +37,9 @@ export type OrderEmailInput = {
   coupon?: string;
   total: number;
   paymentMethod: "pix" | "card";
+  // gclid do Google Ads (medição de conversão offline). Opcional — pedido sem
+  // anúncio fica sem. O template de e-mail ignora este campo.
+  gclid?: string;
 };
 
 // Marca derivada do domínio da loja (NEXT_PUBLIC_APP_URL, que JÁ existe) — assim

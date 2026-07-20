@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react"
 import { adsSendTo, GOOGLE_ADS_PAGEVIEW_LABEL } from "@/lib/google-ads"
+import { captureGclid } from "@/lib/gclid"
 import { products, categories } from "@/lib/data"
 import type { Product } from "@/lib/types"
 import { copaAtiva, ESQUENTA_IDS } from "@/lib/copa"
@@ -42,6 +43,9 @@ function DeliveryApp() {
 
   useEffect(() => {
     setCopaOn(copaAtiva())
+    // Guarda o gclid do anúncio (se a visita chegou com ?gclid=) pra gravar no
+    // pedido depois. Não dispara nada nem muda comportamento.
+    captureGclid()
   }, [])
 
   // Conversão de "Visualização de página" no Google Ads — dispara a cada

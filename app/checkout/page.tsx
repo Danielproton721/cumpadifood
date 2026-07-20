@@ -8,6 +8,7 @@ import { useCart } from '@/lib/cart-context';
 import { ElasticScroll } from '@/components/ui/elastic-scroll';
 import { copaAtiva } from '@/lib/copa';
 import { adsSendTo, GOOGLE_ADS_PURCHASE_LABEL } from '@/lib/google-ads';
+import { getGclid } from '@/lib/gclid';
 
 // Variantes da transição entre etapas — suave e discreta (fade + slide curto).
 const stepVariants = {
@@ -355,8 +356,13 @@ function CheckoutContent() {
   useEffect(() => {
     if (!paymentConfirmed || !orderCode || purchaseConversionSentRef.current) return;
     purchaseConversionSentRef.current = true;
-    sendGoogleAdsPurchaseConversion(orderCode, checkoutTotal);
-  }, [paymentConfirmed, orderCode, checkoutTotal]);
+    // Valor REAL do pedido pago = total do snapshot da confirmação (estável).
+    // NÃO usar checkoutTotal aqui: ele é reativo ao carrinho e pode recalcular
+    // errado (ex.: item removido/carrinho limpo) antes deste effect rodar —
+    // era isso que mandava um valor errado (ex.: 5,11 numa venda de 91,39).
+    const paidValue = confirmedOrder?.total ?? checkoutTotal;
+    sendGoogleAdsPurchaseConversion(orderCode, paidValue);
+  }, [paymentConfirmed, orderCode, confirmedOrder, checkoutTotal]);
 
   // Mantém a ref espelhada com o estado (lida pelas armadilhas de saída).
   useEffect(() => {
@@ -678,6 +684,7 @@ function CheckoutContent() {
             discount: discount > 0 ? discount : undefined,
             coupon: coupon ?? undefined,
             total: checkoutTotal,
+            gclid: getGclid() ?? undefined,
           },
         })
       });
