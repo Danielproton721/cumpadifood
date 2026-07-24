@@ -348,8 +348,11 @@ function CheckoutContent() {
 
   // Entrega grátis (delivery local em BH). Sem frete pago.
   const shippingPrice: number = 0;
-  // Total cobrado = subtotal menos o desconto do cupom (se houver).
-  const checkoutTotal = totalWithDiscount;
+  // O cupom (único desconto da loja) SÓ vale no PIX. No cartão o total é cheio
+  // (sem o desconto) — assim o desconto vira alavanca de conversão pro PIX.
+  const cupomValePraEsteMetodo = payMethod === 'pix';
+  const totalCobrado = cupomValePraEsteMetodo ? totalWithDiscount : totalPrice;
+  const checkoutTotal = totalCobrado;
 
   // Conversao de compra (Google Ads) — dispara apenas quando o pagamento foi
   // confirmado, enviando o valor real e o id unico do pedido.
@@ -633,8 +636,8 @@ function CheckoutContent() {
             items: items.map((it) => ({ name: it.name, image: it.image, price: it.price, quantity: it.quantity })),
             subtotal: totalPrice,
             shipping: 0,
-            discount: discount > 0 ? discount : undefined,
-            coupon: coupon ?? undefined,
+            discount: discount > 0 && method === 'pix' ? discount : undefined,
+            coupon: discount > 0 && method === 'pix' ? (coupon ?? undefined) : undefined,
             total: checkoutTotal,
           }),
         });
@@ -1688,12 +1691,12 @@ function CheckoutContent() {
                 <div className="mt-3 rounded-2xl bg-gray-50 p-2 space-y-2">
                   <button type="button" onClick={() => setPayMethod('pix')} className={`w-full flex items-center gap-3 rounded-xl bg-white px-4 py-4 border-2 transition ${payMethod === 'pix' ? 'border-[#e23744]' : 'border-transparent'}`}>
                     <img src="https://icons.yampi.me/svg/card-pix.svg" alt="Pix" width="28" height="20" />
-                    <span className="flex-1 text-left font-bold text-gray-900">PIX<span className="block text-xs font-medium text-gray-500">Aprovação na hora</span></span>
+                    <span className="flex-1 text-left font-bold text-gray-900">PIX<span className="block text-xs font-medium text-gray-500">Aprovação na hora{discount > 0 ? <span className="font-bold text-emerald-600"> · você economiza R$ {discount.toFixed(2).replace('.', ',')}</span> : ''}</span></span>
                     <span className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${payMethod === 'pix' ? 'border-[#e23744]' : 'border-gray-300'}`}>{payMethod === 'pix' && <span className="h-2.5 w-2.5 rounded-full bg-[#e23744]" />}</span>
                   </button>
                   <button type="button" onClick={() => setPayMethod('card')} className={`w-full flex items-center gap-3 rounded-xl bg-white px-4 py-4 border-2 transition ${payMethod === 'card' ? 'border-[#e23744]' : 'border-transparent'}`}>
                     <CreditCard className="w-6 h-6 text-gray-700 shrink-0" />
-                    <span className="flex-1 text-left font-bold text-gray-900">Cartão de crédito<span className="block text-xs font-medium text-gray-500">Em até 12x</span></span>
+                    <span className="flex-1 text-left font-bold text-gray-900">Cartão de crédito<span className="block text-xs font-medium text-gray-500">Em até 12x{discount > 0 ? ' · cupom não se aplica' : ''}</span></span>
                     <span className={`flex h-5 w-5 items-center justify-center rounded-full border-2 ${payMethod === 'card' ? 'border-[#e23744]' : 'border-gray-300'}`}>{payMethod === 'card' && <span className="h-2.5 w-2.5 rounded-full bg-[#e23744]" />}</span>
                   </button>
                 </div>
@@ -1703,8 +1706,11 @@ function CheckoutContent() {
                 <div className="mt-3 space-y-2.5">
                   <div className="flex justify-between text-sm"><span className="text-gray-500">Total dos itens</span><span className="font-medium text-gray-800">R$ {totalPrice.toFixed(2).replace('.', ',')}</span></div>
                   <div className="flex justify-between text-sm"><span className="text-gray-500">Entrega</span><span className="font-bold text-emerald-600">Grátis</span></div>
-                  {discount > 0 && (
+                  {discount > 0 && payMethod === 'pix' && (
                     <div className="flex justify-between text-sm"><span className="text-gray-500">Desconto ({coupon})</span><span className="font-bold text-emerald-600">- R$ {discount.toFixed(2).replace('.', ',')}</span></div>
+                  )}
+                  {discount > 0 && payMethod === 'card' && (
+                    <div className="flex justify-between text-xs"><span className="font-medium text-amber-600">Cupom {coupon} vale só no PIX</span><span className="font-medium text-gray-400">no cartão: sem desconto</span></div>
                   )}
                   <div className="flex justify-between items-baseline pt-2.5 border-t border-gray-100"><span className="font-bold text-gray-900 text-lg">Total</span><span className="font-bold text-gray-900 text-lg">R$ {checkoutTotal.toFixed(2).replace('.', ',')}</span></div>
                 </div>
