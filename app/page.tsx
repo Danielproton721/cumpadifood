@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react"
 import { adsSendTo, GOOGLE_ADS_PAGEVIEW_LABEL } from "@/lib/google-ads"
 import { captureGclid } from "@/lib/gclid"
-import { products, categories } from "@/lib/data"
+import { products, categories, HOME_CATEGORY_ID } from "@/lib/data"
 import type { Product } from "@/lib/types"
 import { copaAtiva, ESQUENTA_IDS } from "@/lib/copa"
 import { StoreHeader } from "@/components/delivery/store-header"
@@ -30,7 +30,7 @@ import { useCart } from "@/lib/cart-context"
 
 function DeliveryApp() {
   const { addCombo } = useCart()
-  const [activeCategory, setActiveCategory] = useState("ofertas")
+  const [activeCategory, setActiveCategory] = useState(HOME_CATEGORY_ID)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isTransitioning, setIsTransitioning] = useState(false)
@@ -119,8 +119,11 @@ function DeliveryApp() {
     }, 150)
   }, [activeCategory])
 
-  const featuredProducts = products.filter((p) => p.category === "ofertas")
-  const otherCategories = categories.filter((c) => c.id !== "ofertas")
+  // A 1ª coleção visível é a aba inicial: vira a vitrine do topo da home.
+  const featuredProducts = products.filter((p) => p.category === HOME_CATEGORY_ID)
+  const otherCategories = categories.filter((c) => c.id !== HOME_CATEGORY_ID)
+  const featuredTitle =
+    HOME_CATEGORY_ID === "ofertas" ? "Ofertas do Dia" : categories.find((c) => c.id === HOME_CATEGORY_ID)?.name
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -141,7 +144,7 @@ function DeliveryApp() {
       />
 
       <main id="products-section" className={`max-w-lg mx-auto px-4 py-6 transition-all duration-300 ${isTransitioning ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"}`}>
-        {activeCategory === "ofertas" ? (
+        {activeCategory === HOME_CATEGORY_ID ? (
           <>
             {copaOn && esquentaProducts.length > 0 && (
               <section className="mb-8">
@@ -180,7 +183,7 @@ function DeliveryApp() {
             <section className="mb-8">
               <div className="flex flex-col gap-2 mb-4">
                 <h2 className="text-lg font-bold text-foreground">
-                  Ofertas do Dia
+                  {featuredTitle}
                 </h2>
                 <PromoTimer />
               </div>
@@ -254,7 +257,7 @@ function DeliveryApp() {
           </>
         ) : (
           <section>
-            {activeCategory !== "ofertas" ? (
+            {activeCategory !== HOME_CATEGORY_ID ? (
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-foreground">
                   {categories.find((c) => c.id === activeCategory)?.name}

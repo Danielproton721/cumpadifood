@@ -1,6 +1,7 @@
-import type { Product, Additional, Review } from "./types"
+import type { Product, Additional, Review, Category } from "./types"
+import { docesCategories, docesProducts } from "./data-doces"
 
-export const products: Product[] = [
+const produtosBebidas: Product[] = [
   // PRODUTO DE TESTE — categoria "teste": não aparece nas seções/abas da home,
   // só na busca (pesquise "teste"). Pode furar o pedido mínimo (ver cart-drawer).
   {
@@ -2382,13 +2383,30 @@ export const reviews: Review[] = [
   { id: "r6", name: "Juliana C.", rating: 5, comment: "Atendimento top e entrega antes do previsto.", date: "2 semanas atrás" },
 ]
 
-export const categories = [
-  { id: "ofertas", name: "Ofertas", icon: "/categories/ofertas.png" },
-  { id: "cervejas", name: "Cervejas", icon: "/categories/cervejas.png" },
-  { id: "comida", name: "Comida", icon: "/categories/comida.png" },
-  { id: "queridinhos", name: "Destilados", icon: "/categories/destilados.png" },
-  { id: "combinados", name: "Refri e Energeticos", icon: "/categories/refrigerantes.png" },
-  { id: "poke", name: "Gelinhos", icon: "/categories/aguas-gelo.png" },
-  { id: "churrasco", name: "Churrasco", icon: "/categories/churrasco.webp" },
-  { id: "salgadinho", name: "Salgadinho", icon: "/categories/salgadinho.webp" },
-  ]
+// Coleções da loja de bebidas — OCULTAS desde 14/09/2026 (a loja passou a vender doces).
+// Nada foi apagado: pra uma coleção voltar, é só tirar o `hidden: true` dela.
+const categoriasBebidas: Category[] = [
+  { id: "ofertas", name: "Ofertas", icon: "/categories/ofertas.png", hidden: true, brindeGratis: true },
+  { id: "cervejas", name: "Cervejas", icon: "/categories/cervejas.png", hidden: true, brindeGratis: true },
+  { id: "comida", name: "Comida", icon: "/categories/comida.png", hidden: true, brindeGratis: true },
+  { id: "queridinhos", name: "Destilados", icon: "/categories/destilados.png", hidden: true, brindeGratis: true },
+  { id: "combinados", name: "Refri e Energeticos", icon: "/categories/refrigerantes.png", hidden: true, brindeGratis: true },
+  { id: "poke", name: "Gelinhos", icon: "/categories/aguas-gelo.png", hidden: true, brindeGratis: true },
+  { id: "churrasco", name: "Churrasco", icon: "/categories/churrasco.webp", hidden: true, brindeGratis: true },
+  { id: "salgadinho", name: "Salgadinho", icon: "/categories/salgadinho.webp", hidden: true, brindeGratis: true },
+]
+
+export const allCategories: Category[] = [...docesCategories, ...categoriasBebidas]
+
+/** Coleções visíveis, na ordem das abas. A primeira é a aba inicial da home. */
+export const categories = allCategories.filter((c) => !c.hidden)
+
+export const HOME_CATEGORY_ID = categories[0]?.id ?? "ofertas"
+
+const colecoesVisiveis = new Set(categories.map((c) => c.id))
+
+/** Produtos à venda: só os de coleção visível. O de teste fica fora das abas mas
+ *  continua achável pela busca, pra validar o checkout. */
+export const products: Product[] = [...produtosBebidas, ...docesProducts].filter(
+  (p) => colecoesVisiveis.has(p.category) || p.category === "teste",
+)

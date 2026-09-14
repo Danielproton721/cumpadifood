@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react"
 import Image from "next/image"
 import { ArrowLeft, Minus, Plus, UtensilsCrossed, Package } from "lucide-react"
 import type { Product, Additional } from "@/lib/types"
-import { additionals, products, foodAdditionals } from "@/lib/data"
+import { additionals, allCategories, products, foodAdditionals } from "@/lib/data"
 import { useCart } from "@/lib/cart-context"
 import { useBackClose } from "@/hooks/use-back-close"
 import { Badge } from "@/components/ui/badge"
@@ -64,9 +64,11 @@ export function ProductDetail({ product, onClose, onSelectProduct }: ProductDeta
   const isFood = Array.isArray(dishAdditionals) && dishAdditionals.length > 0
   const additionalsList = isFood ? dishAdditionals : additionals
   const MAX_PER_ADDITIONAL = isFood ? 2 : 1
+  // Brinde do 1º pedido (gelo, copos…) só nas coleções que oferecem — doce não tem.
+  const temBrinde = !isFood && allCategories.some((c) => c.id === product.category && c.brindeGratis)
 
   // (brinde de bebida) já escolhido?
-  const alreadyChosen = !isFood && freeAdditionalChosen !== null
+  const alreadyChosen = temBrinde && freeAdditionalChosen !== null
 
   const handleAdditionalChange = (additionalId: string, delta: number) => {
     if (alreadyChosen) return
@@ -99,7 +101,7 @@ export function ProductDetail({ product, onClose, onSelectProduct }: ProductDeta
       }))
 
     // Brinde de bebida: trava 1 grátis por pedido (não vale pra comida).
-    if (!isFood && !alreadyChosen && additionalsArray.length > 0) {
+    if (temBrinde && !alreadyChosen && additionalsArray.length > 0) {
       setFreeAdditionalChosen(additionalsArray[0].additional)
     }
 
@@ -234,7 +236,7 @@ export function ProductDetail({ product, onClose, onSelectProduct }: ProductDeta
                 })}
               </div>
             </div>
-          ) : (
+          ) : temBrinde ? (
             <div className="mt-6 bg-primary/10 rounded-xl p-4 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both">
             <div className="flex items-center justify-between mb-4">
               <div>
@@ -336,7 +338,7 @@ export function ProductDetail({ product, onClose, onSelectProduct }: ProductDeta
               </div>
             )}
             </div>
-          )}
+          ) : null}
 
           <div className="mt-6">
             <h3 className="font-semibold text-foreground mb-2">

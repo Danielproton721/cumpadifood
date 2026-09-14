@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { UpsellCombo } from "./upsell-combo"
 import { UpsellComida, UPSELL_PRODUCT_IDS } from "./upsell-comida"
+import { products } from "@/lib/data"
 
 interface CartDrawerProps {
   isOpen: boolean
@@ -40,6 +41,8 @@ export function CartDrawer({ isOpen, onClose, onNavigateToCategory }: CartDrawer
   }
 
   const hasUpsellItemInCart = items.some((item) => UPSELL_PRODUCT_IDS.includes(item.product.id))
+  // Pratos em coleção oculta = nada pra oferecer: pula o "Bateu a fome?" antes do checkout.
+  const upsellDisponivel = products.some((p) => UPSELL_PRODUCT_IDS.includes(p.id))
 
   // O produto de teste libera o checkout mesmo abaixo do mínimo.
   const hasTestProduct = items.some((item) => item.product.id === TEST_PRODUCT_ID)
@@ -65,7 +68,7 @@ export function CartDrawer({ isOpen, onClose, onNavigateToCategory }: CartDrawer
 
   const handleCheckout = () => {
     if (!canCheckout) return
-    if (!hasUpsellItemInCart) {
+    if (upsellDisponivel && !hasUpsellItemInCart) {
       setShowUpsellComida(true)
     } else {
       goToCheckout()
