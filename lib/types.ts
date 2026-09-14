@@ -42,13 +42,3 @@ export interface Review {
   comment: string
   date: string
 }
-
-export interface Category {
-  id: string
-  name: string
-  icon: string
-  /** Oculta a coleção (e os produtos dela) da home, das abas, da busca e das sugestões. */
-  hidden?: boolean
-  /** Oferece o adicional grátis do 1º pedido (gelo, copos…) no detalhe do produto. */
-  brindeGratis?: boolean
-}

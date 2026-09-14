@@ -2,9 +2,8 @@
 
 import Image from "next/image"
 import { useState, useEffect, useCallback } from "react"
-import { products, categories } from "@/lib/data"
 
-const ALL_BANNERS = [
+const banners = [
   {
     id: 1,
     src: "/banners/banner-24h.png",
@@ -23,13 +22,6 @@ const ALL_BANNERS = [
   },
 ]
 
-// Banner que leva pra coleção oculta (ou pro montador de combo sem destilados à venda) some junto.
-const banners = ALL_BANNERS.filter((b) =>
-  b.action === "combo"
-    ? products.some((p) => p.category === "queridinhos")
-    : categories.some((c) => c.id === b.categoryLink),
-)
-
 interface BannerCarouselProps {
   onBannerClick?: (categoryId: string) => void
   onComboClick?: () => void
@@ -43,12 +35,9 @@ export function BannerCarousel({ onBannerClick, onComboClick }: BannerCarouselPr
   }, [])
 
   useEffect(() => {
-    if (banners.length < 2) return
     const interval = setInterval(next, 5000)
     return () => clearInterval(interval)
   }, [next])
-
-  if (banners.length === 0) return null
 
   return (
     <div className="max-w-lg mx-auto px-4 pt-4 pb-2">
